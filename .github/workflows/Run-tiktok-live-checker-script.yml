@@ -3,6 +3,7 @@ name: Run TikTok Live Checker Script
 on:
   schedule:
     - cron: '*/30 * * * *'
+  workflow_dispatch: # Προσθέτει τη δυνατότητα χειροκίνητης εκτέλεσης
 
 jobs:
   run-script:
