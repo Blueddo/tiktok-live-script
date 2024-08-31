@@ -17,6 +17,9 @@ jobs:
       with:
         python-version: '3.12'
 
+    - name: Install Streamlink
+      run: sudo apt-get install -y streamlink
+
     - name: Run Python script
       run: |
         python check_tiktok_live.py
