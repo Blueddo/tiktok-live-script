@@ -18,7 +18,7 @@ jobs:
         python-version: '3.12'
 
     - name: Run Python script
-      run: python your_script.py
+      run: python check_tiktok_live.py
 
     - name: Commit and push M3U file
       run: |
