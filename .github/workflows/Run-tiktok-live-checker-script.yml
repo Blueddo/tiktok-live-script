@@ -18,7 +18,7 @@ jobs:
         python-version: '3.12'
 
     - name: Install Streamlink
-      run: sudo apt-get install -y streamlink
+      run: sudo apt-get update && sudo apt-get install -y streamlink
 
     - name: Run Python script
       run: |
