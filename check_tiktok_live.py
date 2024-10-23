@@ -36,17 +36,8 @@ def update_m3u_file(live_users):
             if live_users:
                 user_count = 0
                 for user, (output, start_time) in live_users.items():
-                    avatar_thumb = get_avatar_thumb(user, profile_data)
-                    if not check_image_access(avatar_thumb):
-                        avatar_thumb = "https://www.tiktok.com/favicon.ico"
-                    try:
-                        short_avatar_thumb = shorten_url(avatar_thumb)
-                    except Exception as e:
-                        print(f"Σφάλμα κατά την συντόμευση της διεύθυνσης URL: {e}")
-                        short_avatar_thumb = avatar_thumb
-                    if short_avatar_thumb is None:
-                        short_avatar_thumb = avatar_thumb
-                    write_m3u_entry(m3u_file, short_avatar_thumb, user, start_time, output)
+                    avatar_thumb = "https://www.tiktok.com/favicon.ico"  # Προσθέστε τη λήψη avatar_thumb αν θέλετε
+                    write_m3u_entry(m3u_file, avatar_thumb, user, start_time, output)
                     user_count += 1
                 print(f"Το αρχείο M3U ενημερώθηκε επιτυχώς με τον χρήστη {user}. Συνολικά: {user_count} live.")
             else:
@@ -62,8 +53,8 @@ def update_m3u_file(live_users):
 def write_m3u_header(m3u_file):
     m3u_file.write("#EXTM3U $BorpasFileFormat=\"1\" $NestedGroupsSeparator=\"/\"\n")
 
-def write_m3u_entry(m3u_file, short_avatar_thumb, user, start_time, output):
-    m3u_file.write(f"#EXTINF:-1 group-title=\"TikTok Live\" tvg-logo=\"{short_avatar_thumb}\" tvg-id=\"simpleTVFakeEpgId\" $ExtFilter=\"Tikitok live\",{user}\n")
+def write_m3u_entry(m3u_file, avatar_thumb, user, start_time, output):
+    m3u_file.write(f"#EXTINF:-1 group-title=\"TikTok Live\" tvg-logo=\"{avatar_thumb}\" tvg-id=\"simpleTVFakeEpgId\" $ExtFilter=\"Tikitok live\",{user}\n")
     m3u_file.write(f"{output}\n")
 
 def write_default_stream(m3u_file, default_stream_url):
@@ -87,29 +78,25 @@ def check_image_access(url):
         return False
 
 def push_to_github():
-    try:
-        # Configure Git user with a no-reply email
-        subprocess.run(["git", "config", "--global", "user.email", "Blueddo@users.noreply.github.com"], check=True)
-        subprocess.run(["git", "config", "--global", "user.name", "Blueddo"], check=True)
+    if os.path.exists("tiktok_live.m3u"):
+        try:
+            # Configure Git user with a no-reply email
+            subprocess.run(["git", "config", "--global", "user.email", "Blueddo@users.noreply.github.com"], check=True)
+            subprocess.run(["git", "config", "--global", "user.name", "Blueddo"], check=True)
 
-        # Add changes to git
-        subprocess.run(["git", "add", "tiktok_live.m3u"], check=True)
-        subprocess.run(["git", "commit", "-m", "Update tiktok_live.m3u"], check=True)
+            # Add changes to git
+            subprocess.run(["git", "add", "tiktok_live.m3u"], check=True)
+            subprocess.run(["git", "commit", "-m", "Update tiktok_live.m3u"], check=True)
 
-        # Push changes to GitHub using PAT
-        subprocess.run(["git", "push", "https://Blueddo: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@github.com/Blueddo/tiktok-live-script.git"], check=True)
-        print("Αλλαγές ανέβηκαν στο GitHub.")
-    except subprocess.CalledProcessError as e:
-        print(f"Σφάλμα κατά την προώθηση αλλαγών στο GitHub: {e}")
-
-# Στο τέλος της συνάρτησης fetch_and_save_data, προσθέστε αυτήν την κλήση:
-push_to_github()
-
+            # Push changes to GitHub using PAT
+            subprocess.run(["git", "push", "https://Blueddo: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@github.com/Blueddo/tiktok-live-script.git"], check=True)
+            print("Αλλαγές ανέβηκαν στο GitHub.")
+        except subprocess.CalledProcessError as e:
+            print(f"Σφάλμα κατά την προώθηση αλλαγών στο GitHub: {e}")
 
 def fetch_and_save_data():
     users = load_users()
     live_users = {}
-    push_to_github()
 
     for user in users:
         user, output, start_time = check_user(user)
