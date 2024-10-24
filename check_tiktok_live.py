@@ -1,8 +1,16 @@
-import requests
-import json
-import subprocess
 import os
+import requests
+import subprocess
 from datetime import datetime, timedelta
+
+# Μήνυμα έναρξης
+print("==============================================================================================")
+print("Καλώς ήρθατε στο Script Παρακολούθησης Ζωντανών Μεταδόσεων TikTok!")
+print("Αυτό το script παρακολουθεί ζωντανές μεταδόσεις TikTok και δημιουργεί μια λίστα αναπαραγωγής m3u με τα URLs των ζωντανών ροών.")
+print("Χρησιμοποιεί το streamlink για την εξαγωγή των URLs των ζωντανών ροών και ενημερώνει το αρχείο m3u.")
+print("Παρέχει επίσης αυτόματη ενημέρωση και ανέβασμα του αρχείου m3u στο GitHub repository σας.")
+print("Ας ξεκινήσουμε την παρακολούθηση...")
+print("==============================================================================================")
 
 def load_users():
     users = []
@@ -36,7 +44,7 @@ def update_m3u_file(live_users):
             if live_users:
                 user_count = 0
                 for user, (output, start_time) in live_users.items():
-                    avatar_thumb = "https://www.tiktok.com/favicon.ico"  # Προσθέστε τη λήψη avatar_thumb αν θέλετε
+                    avatar_thumb = "https://www.tiktok.com/favicon.ico"
                     write_m3u_entry(m3u_file, avatar_thumb, user, start_time, output)
                     user_count += 1
                 print(f"Το αρχείο M3U ενημερώθηκε επιτυχώς με τον χρήστη {user}. Συνολικά: {user_count} live.")
@@ -60,22 +68,6 @@ def write_m3u_entry(m3u_file, avatar_thumb, user, start_time, output):
 def write_default_stream(m3u_file, default_stream_url):
     m3u_file.write("#EXTINF:-1 group-title=\"TikTok Live\" tvg-logo=\"https://www.tiktok.com/favicon.ico\" tvg-id=\"simpleTVFakeEpgId\" $ExtFilter=\"Tikitok live\",Default Stream\n")
     m3u_file.write(f"{default_stream_url}\n")
-
-def get_avatar_thumb(user, profile_data):
-    for profile in profile_data:
-        if profile.get("user", {}).get("uniqueId") == user:
-            avatar_thumb = profile.get("user", {}).get("avatarThumb", "https://www.tiktok.com/favicon.ico")
-            if check_image_access(avatar_thumb):
-                return avatar_thumb
-    return "https://www.tiktok.com/favicon.ico"
-
-def check_image_access(url):
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        return True
-    except requests.RequestException:
-        return False
 
 def push_to_github():
     if os.path.exists("tiktok_live.m3u"):
@@ -102,3 +94,5 @@ def fetch_and_save_data():
         user, output, start_time = check_user(user)
         if output:
             live_users
+    update_m3u_file(live_users)
+    push_to_github()
