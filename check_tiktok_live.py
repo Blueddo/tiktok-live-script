@@ -31,7 +31,8 @@ users = [
 ]
 
 # Δημιουργία αρχείου m3u με επιπλέον πληροφορίες
-with open("tiktok_live.m3u", "w") as m3u_file:
+m3u_filename = "tiktok_live.m3u"
+with open(m3u_filename, "w") as m3u_file:
     m3u_file.write("#EXTM3U $BorpasFileFormat=\"1\" $NestedGroupsSeparator=\"/\"\n")
 print("Δημιουργήθηκε το αρχείο m3u και γράφτηκε η επικεφαλίδα")
 
@@ -47,33 +48,33 @@ for user in users:
 
     if "error: No playable streams found on this URL" not in output:
         if output.startswith("https://pull-f5-tt03.fcdn.eu.tiktokcdn.com/stage/stream-"):
-            with open("tiktok_live.m3u", "a") as m3u_file:
+            with open(m3u_filename, "a") as m3u_file:
                 m3u_file.write(f"#EXTINF:-1 group-title=\"TikTok Live\" tvg-logo=\"https://www.tiktok.com/favicon.ico\" tvg-id=\"simpleTVFakeEpgId\" $ExtFilter=\"Tikitok live\",{user}\n")
                 m3u_file.write(f"{output}\n")
-            print(f"Προστέθηκε το live για τον χρήστη: {user}")
+            print(f"Προστέθηκε live για τον χρήστη: {user}")
 
 # Αφαίρεση μηνυμάτων σφάλματος από το αρχείο m3u
 print("Αφαίρεση μηνυμάτων σφάλματος από το αρχείο m3u")
-with open("tiktok_live.m3u", "r") as m3u_file:
+with open(m3u_filename, "r") as m3u_file:
     lines = m3u_file.readlines()
 
-with open("tiktok_live.m3u", "w") as m3u_file:
+with open(m3u_filename, "w") as m3u_file:
     for line in lines:
         if not line.startswith("error:"):
             m3u_file.write(line)
             print(f"Προστέθηκε γραμμή στο αρχείο m3u: {line.strip()}")
 
 def push_to_github():
-    if os.path.exists("tiktok_live.m3u"):
+    if os.path.exists(m3u_filename):
         try:
             # Configure Git user with a no-reply email
             subprocess.run(["git", "config", "--global", "user.email", "Blueddo@users.noreply.github.com"], check=True)
             subprocess.run(["git", "config", "--global", "user.name", "Blueddo"], check=True)
             # Add changes to git
-            subprocess.run(["git", "add", "tiktok_live.m3u"], check=True)
+            subprocess.run(["git", "add", m3u_filename], check=True)
             subprocess.run(["git", "commit", "-m", "Update tiktok_live.m3u"], check=True)
             # Push changes to GitHub using PAT
-            subprocess.run(["git", "push", "https://Blueddo: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@github.com/Blueddo/tiktok-live-script.git"], check=True)
+            subprocess.run(["git", "push", f"https://Blueddo:${{ secrets.ACTIONS_PAT }}@github.com/Blueddo/tiktok-live-script.git"], check=True)
             print("Αλλαγές ανέβηκαν στο GitHub.")
         except subprocess.CalledProcessError as e:
             print(f"Σφάλμα κατά την προώθηση αλλαγών στο GitHub: {e}")
