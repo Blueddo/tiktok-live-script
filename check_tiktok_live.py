@@ -29,6 +29,7 @@ users = [
     "petronela_birsilaoff", "kostaspal82", "eirinikalika", "evita4040", "user91618478129743", "amaliakwstaraa",
     "saliagos.nikos", "xristinadiak", "focusfm103.6", "agapisartdesign", "pocahontas__._"
 ]
+print("Η λίστα των χρηστών χωρίς διπλότυπα δημιουργήθηκε")
 
 # Δημιουργία αρχείου m3u με επιπλέον πληροφορίες
 m3u_filename = "tiktok_live.m3u"
@@ -51,7 +52,7 @@ for user in users:
             with open(m3u_filename, "a") as m3u_file:
                 m3u_file.write(f"#EXTINF:-1 group-title=\"TikTok Live\" tvg-logo=\"https://www.tiktok.com/favicon.ico\" tvg-id=\"simpleTVFakeEpgId\" $ExtFilter=\"Tikitok live\",{user}\n")
                 m3u_file.write(f"{output}\n")
-            print(f"Προστέθηκε live για τον χρήστη: {user}")
+            print(f"Προστέθηκε live stream για τον χρήστη: {user}")
 
 # Αφαίρεση μηνυμάτων σφάλματος από το αρχείο m3u
 print("Αφαίρεση μηνυμάτων σφάλματος από το αρχείο m3u")
