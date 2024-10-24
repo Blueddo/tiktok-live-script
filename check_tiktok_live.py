@@ -38,8 +38,8 @@ with open(m3u_filename, "w") as m3u_file:
 print("Δημιουργήθηκε το αρχείο m3u και γράφτηκε η επικεφαλίδα")
 
 # Έλεγχος για κάθε χρήστη αν είναι live
-for user in users:
-    print(f"Έλεγχος για τον χρήστη: {user}")
+for idx, user in enumerate(users, start=1):
+    print(f"Έλεγχος {idx} για τον χρήστη: {user}")
     result = subprocess.run(
         ["streamlink", f"https://www.tiktok.com/@{user}", "worst", "--stream-url"],
         capture_output=True, text=True
