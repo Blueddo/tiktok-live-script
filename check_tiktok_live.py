@@ -87,12 +87,6 @@ def push_to_github():
             print(f"Σφάλμα κατά την προώθηση αλλαγών στο GitHub: {e}")
     else:
         print("Το αρχείο tiktok_live.m3u δεν βρέθηκε. Δεν έγινε καμία προώθηση στο GitHub.")
-, check=True)
-            subprocess.run(["git", "commit", "-m", "Update tiktok_live.m3u"], check=True)
-            # Push changes to GitHub using PAT
-            subprocess.run(["git", "push", f"https://Blueddo:${{ secrets.ACTIONS_PAT }}@github.com/Blueddo/tiktok-live-script.git"], check=True)
-            print("Αλλαγές ανέβηκαν στο GitHub.")
-        except subprocess.CalledProcessError as e:
-            print(f"Σφάλμα κατά την προώθηση αλλαγών στο GitHub: {e}")
-    else:
-        print("Το αρχείο tiktok_live.m3u δεν βρέθηκε. Δεν έγινε καμία προώθηση στο GitHub.")
+
+# Κλήση της συνάρτησης push_to_github για προώθηση των αλλαγών
+push_to_github()
