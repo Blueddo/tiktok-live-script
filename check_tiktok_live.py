@@ -65,6 +65,12 @@ with open(m3u_filename, "w") as m3u_file:
             m3u_file.write(line)
             print(f"Προστέθηκε γραμμή στο αρχείο m3u: {line.strip()}")
 
+# Προσθήκη καταγραφής
+if os.stat(m3u_filename).st_size > 0:
+    print("Το αρχείο m3u ενημερώθηκε με νέα δεδομένα.")
+else:
+    print("Το αρχείο m3u δεν ενημερώθηκε με νέα δεδομένα.")
+
 def push_to_github():
     if os.path.exists(m3u_filename):
         try:
@@ -73,6 +79,15 @@ def push_to_github():
             subprocess.run(["git", "config", "--global", "user.name", "Blueddo"], check=True)
             # Add changes to git
             subprocess.run(["git", "add", m3u_filename], check=True)
+            subprocess.run(["git", "commit", "-m", "Update tiktok_live.m3u"], check=True)
+            # Push changes to GitHub using PAT
+            subprocess.run(["git", "push", f"https://Blueddo:${{ secrets.ACTIONS_PAT }}@github.com/Blueddo/tiktok-live-script.git"], check=True)
+            print("Αλλαγές ανέβηκαν στο GitHub.")
+        except subprocess.CalledProcessError as e:
+            print(f"Σφάλμα κατά την προώθηση αλλαγών στο GitHub: {e}")
+    else:
+        print("Το αρχείο tiktok_live.m3u δεν βρέθηκε. Δεν έγινε καμία προώθηση στο GitHub.")
+, check=True)
             subprocess.run(["git", "commit", "-m", "Update tiktok_live.m3u"], check=True)
             # Push changes to GitHub using PAT
             subprocess.run(["git", "push", f"https://Blueddo:${{ secrets.ACTIONS_PAT }}@github.com/Blueddo/tiktok-live-script.git"], check=True)
