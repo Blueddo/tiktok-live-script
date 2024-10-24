@@ -34,5 +34,5 @@ jobs:
           git config --global user.email "Blueddo@users.noreply.github.com"
           git config --global user.name "Blueddo"
           git add tiktok_liveTEST.m3u
-          git commit -m "Update tiktok_liveTEST.m3u"
+          git commit -m "Update tiktok_live.m3u"
           git push https://Blueddo:${{ secrets.ACTIONS_PAT }}@github.com/Blueddo/tiktok-live-script.git
