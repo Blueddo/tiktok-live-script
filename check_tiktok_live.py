@@ -40,18 +40,24 @@ with open(m3u_filename, "w") as m3u_file:
     m3u_file.write("#EXTM3U $BorpasFileFormat=\"1\" $NestedGroupsSeparator=\"/\"\n")
 print("Δημιουργήθηκε το αρχείο m3u και γράφτηκε η επικεφαλίδα")
 
+def check_user(user):
+    result = subprocess.run(
+        ["streamlink", "https://www.tiktok.com/@{}".format(user), "worst", "--stream-url"],
+        capture_output=True, text=True
+    )
+    output = result.stdout.strip()
+    
+    if output.startswith("https://pull-f5-tt03.fcdn.eu.tiktokcdn.com/stage/stream-"):
+        return user, output
+    return user, None
+
 # Έλεγχος για κάθε χρήστη αν είναι live
 any_live_stream = False  # Σημαία για να ελέγξει αν υπάρχει κάποιο live stream
 for idx, user in enumerate(users, start=1):
     print(f"Έλεγχος {idx} για τον χρήστη: {user}")
-    result = subprocess.run(
-        ["streamlink", f"https://www.tiktok.com/@{user}", "worst", "--stream-url"],
-        capture_output=True, text=True
-    )
-    output = result.stdout.strip()
-    print(f"Αποτέλεσμα για τον χρήστη {user}: {output}")
-
-    if output.startswith("https://pull-f5-tt03.fcdn.eu.tiktokcdn.com/stage/stream-"):
+    user, output = check_user(user)
+    
+    if output:
         with open(m3u_filename, "a") as m3u_file:
             m3u_file.write(f"#EXTINF:-1 group-title=\"TikTok Live\" tvg-logo=\"https://www.tiktok.com/favicon.ico\" tvg-id=\"simpleTVFakeEpgId\" $ExtFilter=\"Tikitok live\",{user}\n")
             m3u_file.write(f"{output}\n")
