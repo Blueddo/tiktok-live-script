@@ -1,4 +1,3 @@
-import os
 import subprocess
 
 # Ορισμός χρηστών TikTok
