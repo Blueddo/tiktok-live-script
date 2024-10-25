@@ -10,7 +10,7 @@ users = [
     "chris.fintr", "lazaros.a.avramidis", "eosforos_._666", "zoi808", "levonleon1996", "esperanzavanlife",
     "koemtzidoyyyy", "candles.and.events", "chris_magic_mountain_", "kkjewelry1", "steve_ant",
     "mairi_mihoy_official", "mydatingexperience2", "ioannistserkis78", "pounentism", "maria.aristopoulo45",
-    "xara_xara_xara", "poparatsaklidou", "tzwrtzina_st", "kkonsta_ntina", "emy_has.anastasiaa_official",
+    "xara_xara_xara", "poparatsaklidou", "tzwrtzina_st", "kkonsta_ntina", "emy_has", ".anastasiaa_official",
     "nicolkass_", "user5376357754610", "andronikinikaki", "nina_bodokia", "haroula_taotao", "karydaki_land",
     "jimpr2grivakis", "akadimia_ygeias", "gkounaki.elena", "mari_sweet_and_cake", "d0nalduck7", "irinious1",
     "eirini_psychologi", "panagiotis_milas", "xristosdimitroulis", "eephydatia", "antreastisi",
