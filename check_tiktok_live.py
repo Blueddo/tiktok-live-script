@@ -10,7 +10,7 @@ users = [
     "chris.fintr", "lazaros.a.avramidis", "eosforos_._666", "zoi808", "levonleon1996", "esperanzavanlife",
     "koemtzidoyyyy", "candles.and.events", "chris_magic_mountain_", "kkjewelry1", "steve_ant",
     "mairi_mihoy_official", "mydatingexperience2", "ioannistserkis78", "pounentism", "maria.aristopoulo45",
-    "xara_xara_xara", "poparatsaklidou", "tzwrtzina_st", "kkonsta_ntina", "emy_has", ".anastasiaa_official",
+    "xara_xara_xara", "poparatsaklidou", "tzwrtzina_st", "kkonsta_ntina", "emy_has", "anastasiaa_official",
     "nicolkass_", "user5376357754610", "andronikinikaki", "nina_bodokia", "haroula_taotao", "karydaki_land",
     "jimpr2grivakis", "akadimia_ygeias", "gkounaki.elena", "mari_sweet_and_cake", "d0nalduck7", "irinious1",
     "eirini_psychologi", "panagiotis_milas", "xristosdimitroulis", "eephydatia", "antreastisi",
@@ -45,23 +45,20 @@ any_live_stream = False  # Σημαία για να ελέγξει αν υπάρ
 for idx, user in enumerate(users, start=1):
     print(f"Έλεγχος {idx} για τον χρήστη: {user}")
     result = subprocess.run(
-        ["streamlink", "https://www.tiktok.com/@{}".format(user), "worst", "--stream-url"],
+        ["streamlink", f"https://www.tiktok.com/@{user}", "worst", "--stream-url"],
         capture_output=True, text=True
     )
     output = result.stdout.strip()
     print(f"Αποτέλεσμα για τον χρήστη {user}: {output}")
 
-    if "error: No playable streams found on this URL" in output:
-        print(f"Ο χρήστης {user} δεν είναι live.")
+    if output.startswith("https://pull-f5-tt03.fcdn.eu.tiktokcdn.com/stage/stream-"):
+        with open(m3u_filename, "a") as m3u_file:
+            m3u_file.write(f"#EXTINF:-1 group-title=\"TikTok Live\" tvg-logo=\"https://www.tiktok.com/favicon.ico\" tvg-id=\"simpleTVFakeEpgId\" $ExtFilter=\"Tikitok live\",{user}\n")
+            m3u_file.write(f"{output}\n")
+        print(f"Ο χρήστης {user} είναι live και προστέθηκε στο αρχείο m3u.")
+        any_live_stream = True  # Ενημέρωση της σημαίας αν βρεθεί κάποιο live stream
     else:
-        if output.startswith("https://pull-f5-tt03.fcdn.eu.tiktokcdn.com/stage/stream-"):
-            with open(m3u_filename, "a") as m3u_file:
-                m3u_file.write(f"#EXTINF:-1 group-title=\"TikTok Live\" tvg-logo=\"https://www.tiktok.com/favicon.ico\" tvg-id=\"simpleTVFakeEpgId\" $ExtFilter=\"Tikitok live\",{user}\n")
-                m3u_file.write(f"{output}\n")
-            print(f"Ο χρήστης {user} είναι live και προστέθηκε στο αρχείο m3u.")
-            any_live_stream = True  # Ενημέρωση της σημαίας αν βρεθεί κάποιο live stream
-        else:
-            print(f"Ο χρήστης {user} δεν είναι live.")
+        print(f"Ο χρήστης {user} δεν είναι live.")
 
 # Προσθήκη καταγραφής
 if any_live_stream:
