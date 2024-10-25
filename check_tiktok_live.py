@@ -30,8 +30,6 @@ users = [
     "saliagos.nikos", "xristinadiak", "focusfm103.6", "agapisartdesign", "pocahontas__._"
 ]
 
-print("Η λίστα των χρηστών χωρίς διπλότυπα δημιουργήθηκε")
-
 # Δημιουργία αρχείου m3u με επιπλέον πληροφορίες
 m3u_filename = "tiktok_live.m3u"
 with open(m3u_filename, "w") as m3u_file:
@@ -48,7 +46,9 @@ for idx, user in enumerate(users, start=1):
     output = result.stdout.strip()
     print(f"Αποτέλεσμα για τον χρήστη {user}: {output}")
 
-    if "error: No playable streams found on this URL" not in output:
+    if "error: No playable streams found on this URL" in output:
+        print(f"Ο χρήστης {user} δεν είναι live.")
+    else:
         if output.startswith("https://pull-f5-tt03.fcdn.eu.tiktokcdn.com/stage/stream-"):
             with open(m3u_filename, "a") as m3u_file:
                 m3u_file.write(f"#EXTINF:-1 group-title=\"TikTok Live\" tvg-logo=\"https://www.tiktok.com/favicon.ico\" tvg-id=\"simpleTVFakeEpgId\" $ExtFilter=\"Tikitok live\",{user}\n")
