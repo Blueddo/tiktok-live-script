@@ -3,7 +3,7 @@ name: Schedule TikTok Live Check
 on: 
   schedule: 
     - cron: "0 * * * *"  # Εκτέλεση κάθε ώρα στις :00 
-    - cron: "30 * * * *"  # Εκτέλεση κάθε ώρα στις :30
+    - cron: "30 * * * *"  # Εκτέλεση κάθε μισή ώρα στις :30
   push:
     branches:
       - main
