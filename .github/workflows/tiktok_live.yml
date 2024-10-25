@@ -33,11 +33,12 @@ jobs:
         run: |
           git config --global user.email "Blueddo@users.noreply.github.com"
           git config --global user.name "Blueddo"
-          git add .
-          git commit -m "Αποθήκευση μη καταγεγραμμένων αλλαγών"
-          git pull --rebase
           git add tiktok_live.m3u
-          git commit -m "Update tiktok_live.m3u"
-          git push https://Blueddo:${{ secrets.ACTIONS_PAT }}@github.com/Blueddo/tiktok-live-script.git
+          if [ -n "$(git status --porcelain)" ]; then
+            git commit -m "Update tiktok_live.m3u"
+            git push https://Blueddo:${{ secrets.ACTIONS_PAT }}@github.com/Blueddo/tiktok-live-script.git
+          else
+            echo "No changes to commit."
+          fi
         env:
           ACTIONS_PAT: ${{ secrets.ACTIONS_PAT }}
