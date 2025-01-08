@@ -1,5 +1,3 @@
-customtkinter
-CTkListbox
 Pillow
 alive-progress
 termcolor
