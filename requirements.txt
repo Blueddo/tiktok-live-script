@@ -6,7 +6,7 @@ CTkListbox
 alive-progress
 termcolor
 colorama
-dateutil
+python-dateutil
 fpdf
 validators
 pyshorteners
