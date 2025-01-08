@@ -1,8 +1,8 @@
 import subprocess
 import os
 
-# Διαδρομή του repository
-repo_path = "/home/Blueddo/tiktok-live-script"  # Ενημέρωσε με την πραγματική διαδρομή του repository
+# Διαδρομή του repository στο περιβάλλον του GitHub Actions
+repo_path = "/home/runner/work/tiktok-live-script/tiktok-live-script"
 
 # Συνάρτηση για να διαβάσει τους χρήστες από το αρχείο userstiktok.txt
 def read_users_from_file(file_path):
@@ -32,7 +32,7 @@ def check_user(user):
     )
     output = result.stdout.strip()
     
-    if output.startswith("https://"):
+    if output.startswith("https://pull-f5-tt03.fcdn.eu.tiktokcdn.com/stage/stream-"):
         return user, output
     return user, None
 
