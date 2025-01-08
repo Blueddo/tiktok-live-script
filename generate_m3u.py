@@ -39,7 +39,6 @@ import locale  # Εισάγει το locale για διαχείριση τοπι
 # Άλλες χρήσιμες βιβλιοθήκες:
 from fpdf import FPDF  # Χρησιμοποιείται για τη δημιουργία αρχείων PDF.
 import validators  # Εισάγει τη βιβλιοθήκη validators για έλεγχο εγκυρότητας δεδομένων (π.χ. URLs).
-import winsound  # Εισάγει το winsound για αναπαραγωγή ήχων στα Windows.
 import pyshorteners  # Εισάγει το pyshorteners για συντόμευση URLs.
 
 # Ορίζει την τοπική ρύθμιση για την ημερομηνία και την ώρα στα ελληνικά.
