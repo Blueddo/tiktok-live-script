@@ -24,4 +24,4 @@ jobs:
         pip install streamlink
 
     - name: Run generate_m3u.py
-      run: python /home/Blueddo/tiktok-live-script/generate_m3u.py
+      run: python generate_m3u.py
