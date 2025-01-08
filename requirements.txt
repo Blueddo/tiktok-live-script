@@ -1,12 +1,12 @@
-requests
-streamlink
-Pillow
 customtkinter
 CTkListbox
+Pillow
 alive-progress
 termcolor
 colorama
+babel
 python-dateutil
+requests
 fpdf
 validators
 pyshorteners
