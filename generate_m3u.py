@@ -3,33 +3,22 @@ import time
 from tqdm import tqdm
 from termcolor import colored
 
-# Ορισμός χρηστών TikTok
-users = [
-    "viktoria123_40", "sweetcookiemy", "orinimelissa", "boukitses", "mairi_mihoy_official", "mydatingexperience2", "candles.and.events", "xara_xara_xara", "poparatsaklidou", "tzwrtzina_st", "despoina_dim_", "andronikinikaki", "dwroula0", "nina_bodokia", "haroula_taotao", "karidomanna", "grintelas.com", "jimpr2grivakis",
-    "mari_sweet_and_cake", "to_moviesroom", "irinious1", "seminarecipes.gr", "kaiti1959", "eirini_psychologi",
-    "valentiniro", "antreastisi", "stefania_greece_4", "angelos.bam", "angelos.bam2", "viva.camper", "tasosevoia", "koemtzidoyyyy", "paraskeuopoulo",
-    "kondyliam", "mariasofikiti0", "stauroulatheoxari", "ioannakoulouri180", "esperanzavanlife", "kathxhtiko", "sertsas", "ioannistserkis78",
-    "tzwrtzina_st", "tzervoudakis", "lazaros.a.avramidis", "ts0plakix", "despoinabarka4", "freskia.zymi",
-    "georgeporfiris", "zaxaroplastisa", "liros_zaxaroplastiki", "ibadam77", "kokkinosskoufos_skg",
-    "evgenis_smusenok", "aggelikimanousaki", "sto_pi_k_fi", "tustok", "venetvlive",
-    "gwgwdimou", "_______jr_______", "chris.fintr", "marwmaroy", "giannispapasifakis1",
-    "krifes_alithies", "jennakivl", "mirela_kondi", "kostaspal1982",
-    "vasilikigrn", "mariaaaxsl", "kwnstantina.35", "tasospapadopoulo",
-    "angelstathis", "ariadni.mi", "elenimekolli17", "sindika83", "nikosgiko",
-    "glorioustheoc", "basiliki_makri", "billiardgr", "user9333815415701", "konstantina.loventina",
-    "mimi.m1m1ka", "harman_gr", "8meowkat8", "vasiazouganeli", "giannelis_",
-    "klwntia_anna", "sofia_peridi", "journalist_presenter89", "jrramonas", "vasalos_konstantinos",
-    "vaggelitsa.kol", "grandfather_handmade", "ziogasantonis", "vivianavramidou", "sophiazoezitsis",
-    "filiolou", "magic_vesto", "national_star_antreoulis", "seminarecipes.gr", "passailmintinoglou",
-    "petrakosthess", "leonidas_bakery", "six_senses_candles2", "georgegiannak", "piece.of.mam",
-    "marymary___1", "retsamaria442", "ngradiogr", "aristea_alexandrakh", "panagiotis_milas",
-    "edeirini", "anonymous_hacking_team", "pimenidisfilipos", "lenazevgara_official", "johnathan_stef",
-    "orizontasgegonota", "nasia_ev", "nikos_parlantzas", "efi_gkouli96official", "vasilikibotsa",
-    "besianahsj", "elena_charalampoudi", "potsepistasos", "nasia_ev", "katerinawhybe",
-    "petronela_birsilaoff", "kostaspal82", "thegreekmasterchef", "kkjewelry1", "eirinikalika",
-    "sertsas", "ilias_kiazoli", "user91618478129743", "poparatsaklidou", "amaliakwstaraa",
-    "saliagos.nikos", "xristinadiak", "kalliopifen1",
-]
+# Συνάρτηση φόρτωσης χρηστών από αρχείο
+def load_users():
+    users = []
+    try:
+        with open("userstiktok.txt", "r") as file:
+            for line in file:
+                users.append(line.strip())
+        print(f"Φορτώθηκαν {len(users)} χρήστες από το αρχείο userstiktok.txt.")
+    except FileNotFoundError:
+        print("Το αρχείο userstiktok.txt δεν βρέθηκε.")
+    except Exception as e:
+        print(f"Σφάλμα κατά την ανάγνωση του αρχείου: {e}")
+    return users
+
+# Φόρτωση χρηστών από το αρχείο
+users = load_users()
 
 # Δημιουργία αρχείου m3u με επιπλέον πληροφορίες
 with open("tiktok_live.m3u", "w") as m3u_file:
