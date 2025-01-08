@@ -2,7 +2,7 @@ name: Generate M3U
 
 on:
   schedule:
-    - cron: '0,30 * * * *' # Εκτέλεση κάθε μισή ώρα
+    - cron: '0,30 * * * *' # Κάθε μισή ώρα
   workflow_dispatch: # Επιτρέπει την εκτέλεση του workflow χειροκίνητα από το GitHub UI
 
 jobs:
