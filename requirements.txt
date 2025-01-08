@@ -2,4 +2,6 @@ requests
 validators
 pyshorteners
 python-dateutil
+tqdm
+termcolor
 streamlink
