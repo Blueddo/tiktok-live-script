@@ -10,7 +10,6 @@ print("=========================================================================
 # Βιβλιοθήκες για παράλληλη εκτέλεση και διαχείριση χρόνου
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta
-from dateutil import parser
 import requests
 import os
 import re
@@ -18,8 +17,6 @@ import logging
 import json
 import subprocess
 import time
-
-# Άλλες χρήσιμες βιβλιοθήκες
 import validators
 import pyshorteners
 
@@ -80,7 +77,7 @@ def check_user(user):
     )
     output = result.stdout.strip()
     
-    if output.startswith("https://pull-f5-tt0"):
+    if output.startswith("https://"):
         start_time = datetime.now().strftime("%H:%M:%S")
         return user, output, start_time
     return user, None, None
