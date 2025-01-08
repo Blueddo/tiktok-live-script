@@ -2,3 +2,4 @@ requests
 validators
 pyshorteners
 python-dateutil
+streamlink
