@@ -7,10 +7,6 @@ print("Χρησιμοποιεί το streamlink για την εξαγωγή τ�
 print("Ας ξεκινήσουμε την παρακολούθηση...")
 print("==========================================================================================================")
 # Βιβλιοθήκες για το γραφικό περιβάλλον:
-import tkinter as tk  # Εισάγει το κύριο module του Tkinter για τη δημιουργία γραφικών διεπαφών χρήστη (GUI).
-from tkinter import filedialog, Toplevel, messagebox, Listbox, ttk  # Εισάγει συγκεκριμένα widgets και διαλόγους του Tkinter.
-import customtkinter as ctk  # Χρησιμοποιείται για την κατασκευή Custom Tkinter GUI.
-from CTkListbox import CTkListbox  # Χρησιμοποιείται για τη δημιουργία λίστας στο Custom Tkinter.
 from PIL import Image, ImageTk  # Εισάγει το Pillow για επεξεργασία εικόνων και τη χρήση τους σε Tkinter.
 # Βιβλιοθήκες για προσαρμοσμένη διεπαφή και στατιστικά:
 from alive_progress import alive_bar  # Εισάγει τη βιβλιοθήκη alive_progress για τη δημιουργία progress bars στο terminal.
