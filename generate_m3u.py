@@ -41,8 +41,6 @@ from fpdf import FPDF  # Χρησιμοποιείται για τη δημιου
 import validators  # Εισάγει τη βιβλιοθήκη validators για έλεγχο εγκυρότητας δεδομένων (π.χ. URLs).
 import pyshorteners  # Εισάγει το pyshorteners για συντόμευση URLs.
 
-# Ορίζει την τοπική ρύθμιση για την ημερομηνία και την ώρα στα ελληνικά.
-locale.setlocale(locale.LC_TIME, 'el_GR.UTF-8')
 # Ρυθμίζει το logging για την καταγραφή μηνυμάτων σε επίπεδο INFO
 logging.basicConfig(level=logging.INFO, format='%(message)s - %(levelname)s - %(funcName)s')
 settings = {}
