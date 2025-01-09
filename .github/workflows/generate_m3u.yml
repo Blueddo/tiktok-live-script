@@ -27,6 +27,15 @@ jobs:
         run: |
           python generate_m3u.py
 
+      - name: Move M3U to docs folder
+        run: |
+          mkdir -p docs
+          mv tiktok_live.m3u docs/
+
+      - name: Display contents of docs directory
+        run: |
+          ls -la docs
+
       - name: Commit and push changes
         run: |
           git config --global user.name 'github-actions[bot]'
