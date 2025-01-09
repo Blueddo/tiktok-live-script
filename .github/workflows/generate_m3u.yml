@@ -1,5 +1,5 @@
 name: Generate M3U and copy M3U to Public Repository
-
+# Δημιουργία M3U και αντιγραφή M3U στο δημόσιο αποθετήριο
 on:
   schedule:
     - cron: '0,30 * * * *' # Εκτέλεση κάθε μισή ώρα
@@ -45,6 +45,7 @@ jobs:
         with:
           repository: Blueddo/Blueddo
           path: public-repo
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       # Αντιγράφει το αρχείο tiktok_live.m3u στο δημόσιο repository
       - name: Copy M3U to public repository
