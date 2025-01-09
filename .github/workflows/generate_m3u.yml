@@ -15,6 +15,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: Blueddo/tiktok-live-script
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       # Ρυθμίζει την έκδοση Python που χρειάζεται το script
       - name: Set up Python
@@ -45,7 +46,7 @@ jobs:
         with:
           repository: Blueddo/Blueddo
           path: public-repo
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_TOKEN }}
 
       # Αντιγράφει το αρχείο tiktok_live.m3u στο δημόσιο repository
       - name: Copy M3U to public repository
