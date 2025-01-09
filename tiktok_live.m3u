@@ -1,13 +1,7 @@
 #EXTM3U $BorpasFileFormat="1" $NestedGroupsSeparator="/"
 #EXTINF:-1 group-title="TikTok Live" tvg-logo="https://www.tiktok.com/favicon.ico" tvg-id="simpleTVFakeEpgId" $ExtFilter="Tikitok live",mainandros2
-https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7457756962818706198_ld.flv?expire=1737624830&sign=eacbee63197441b74dd9835e2c45b049
-#EXTINF:-1 group-title="TikTok Live" tvg-logo="https://www.tiktok.com/favicon.ico" tvg-id="simpleTVFakeEpgId" $ExtFilter="Tikitok live",giannakis_pap_paok
-https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7457842924433181462_ld.flv?expire=1737624832&sign=79db94ee596623c61d8292d750642d62
-#EXTINF:-1 group-title="TikTok Live" tvg-logo="https://www.tiktok.com/favicon.ico" tvg-id="simpleTVFakeEpgId" $ExtFilter="Tikitok live",tzortzia01
-https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7457844480234883842_ld.flv?expire=1737624854&sign=6169f84f2353cf6536fe665a396e35ba
-#EXTINF:-1 group-title="TikTok Live" tvg-logo="https://www.tiktok.com/favicon.ico" tvg-id="simpleTVFakeEpgId" $ExtFilter="Tikitok live",gkounaki.elena
-https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7457832798481550102_ld.flv?expire=1737624874&sign=9f1e1599753b2b054e0475a622d6dd43
-#EXTINF:-1 group-title="TikTok Live" tvg-logo="https://www.tiktok.com/favicon.ico" tvg-id="simpleTVFakeEpgId" $ExtFilter="Tikitok live",evgenis_smusenok
-https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7457842802380032790_ld.flv?expire=1737624890&sign=877338ab79be2b7aa4a97e560a0fa670
+https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7457756962818706198_ld.flv?expire=1737626970&sign=f6e9935686bd45f2be5438379a2c4209
+#EXTINF:-1 group-title="TikTok Live" tvg-logo="https://www.tiktok.com/favicon.ico" tvg-id="simpleTVFakeEpgId" $ExtFilter="Tikitok live",eni.umi77
+https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7457854733810731799_ld.flv?expire=1737626979&sign=1a4e6e08ac3b66970e501f93e8e149a9
 #EXTINF:-1 group-title="TikTok Live" tvg-logo="https://www.tiktok.com/favicon.ico" tvg-id="simpleTVFakeEpgId" $ExtFilter="Tikitok live",user38301686571908
-https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7457837169693002518_ld.flv?expire=1737624897&sign=0d2fcecd10c96b7ebcdbe4dcd4c37600
+https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7457837169693002518_ld.flv?expire=1737627055&sign=4411e692aad13fc5e3781cd992edfefa
