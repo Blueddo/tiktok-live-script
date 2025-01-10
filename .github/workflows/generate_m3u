@@ -1,5 +1,5 @@
-name: Generate M3U and copy M3U to Public Repository
-# Δημιουργία M3U και αντιγραφή M3U στο δημόσιο αποθετήριο
+name: Generate M3U
+# Δημιουργία M3U
 on:
   schedule:
     - cron: '0,30 * * * *' # Εκτέλεση κάθε μισή ώρα
