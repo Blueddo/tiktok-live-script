@@ -1,11 +1,7 @@
 #EXTM3U $BorpasFileFormat="1" $NestedGroupsSeparator="/"
 #EXTINF:-1 group-title="TikTok Live" tvg-logo="https://www.tiktok.com/favicon.ico" tvg-id="simpleTVFakeEpgId" $ExtFilter="Tikitok live",mainandros2
-https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7458164655836662530_ld.flv?expire=1737707978&sign=64f08760cd8c7002a15675093eb4907c
+https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7458164655836662530_ld.flv?expire=1737709769&sign=8d5548771b76f3057fc9ce05691676de
 #EXTINF:-1 group-title="TikTok Live" tvg-logo="https://www.tiktok.com/favicon.ico" tvg-id="simpleTVFakeEpgId" $ExtFilter="Tikitok live",majlinda_7777
-https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7458177513404025622_ld.flv?expire=1737708009&sign=a68521ef9087655f3d734ebfdce8daca
-#EXTINF:-1 group-title="TikTok Live" tvg-logo="https://www.tiktok.com/favicon.ico" tvg-id="simpleTVFakeEpgId" $ExtFilter="Tikitok live",thegreekmovies
-https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7458203034935053078_ld.flv?expire=1737708014&sign=b5303d9739df4af82ea2a0a01cce87c9
+https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7458177513404025622_ld.flv?expire=1737709796&sign=03d0a67ce53340eb75b6ee89368fc703
 #EXTINF:-1 group-title="TikTok Live" tvg-logo="https://www.tiktok.com/favicon.ico" tvg-id="simpleTVFakeEpgId" $ExtFilter="Tikitok live",user38301686571908
-https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7458189478936857366_ld.flv?expire=1737708054&sign=82915dc6d9e7ddff5619a39c537047c3
-#EXTINF:-1 group-title="TikTok Live" tvg-logo="https://www.tiktok.com/favicon.ico" tvg-id="simpleTVFakeEpgId" $ExtFilter="Tikitok live",focusfm103.6
-https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7458164858668714774_ld.flv?expire=1737708079&sign=c9d91f2540d8c9355a7f1f62e0ead460
+https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7458189478936857366_ld.flv?expire=1737709836&sign=4476cc31b08a75e0033facd93610106d
