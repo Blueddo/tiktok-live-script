@@ -1,17 +1,23 @@
 #EXTM3U $BorpasFileFormat="1" $NestedGroupsSeparator="/"
 #EXTINF:-1 group-title="TikTok Live" tvg-logo="https://www.tiktok.com/favicon.ico" tvg-id="simpleTVFakeEpgId" $ExtFilter="Tikitok live",mainandros2
-https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7459643484321630998_ld.flv?expire=1738062423&sign=f082cefcdda752105e14d4f20d8073e3
+https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7459643484321630998_ld.flv?expire=1738063903&sign=8565a2020bb6f3747fb034e51b9a595f
 #EXTINF:-1 group-title="TikTok Live" tvg-logo="https://www.tiktok.com/favicon.ico" tvg-id="simpleTVFakeEpgId" $ExtFilter="Tikitok live",orinimelissa
-https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7459655417694620438_ld.flv?expire=1738062426&sign=3011ce52771a654ebd36b0ac65d5b58c
+https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7459655417694620438_ld.flv?expire=1738063905&sign=4cd5483bcbd09364e5fed1f73677f16d
+#EXTINF:-1 group-title="TikTok Live" tvg-logo="https://www.tiktok.com/favicon.ico" tvg-id="simpleTVFakeEpgId" $ExtFilter="Tikitok live",despoina_dim_
+https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7459722442043394838_ld.flv?expire=1738063916&sign=26c1b9343f19ef9812e718af7a83ceb2
 #EXTINF:-1 group-title="TikTok Live" tvg-logo="https://www.tiktok.com/favicon.ico" tvg-id="simpleTVFakeEpgId" $ExtFilter="Tikitok live",moonstone.gr
-https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7459700305191488278_ld.flv?expire=1738062439&sign=b702c136a68040583f7803d5b17beab0
+https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7459700305191488278_ld.flv?expire=1738063917&sign=6f959d4bab683d0a0e2eedf5f93e1d1b
 #EXTINF:-1 group-title="TikTok Live" tvg-logo="https://www.tiktok.com/favicon.ico" tvg-id="simpleTVFakeEpgId" $ExtFilter="Tikitok live",artemis_asteriadi
-https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7459720094768433922_ld.flv?expire=1738062442&sign=683ca5078f3500082f68aaa9f63ef010
+https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7459720094768433922_ld.flv?expire=1738063920&sign=762f1316bcd2b43771acde94e398ca6e
+#EXTINF:-1 group-title="TikTok Live" tvg-logo="https://www.tiktok.com/favicon.ico" tvg-id="simpleTVFakeEpgId" $ExtFilter="Tikitok live",steve_ant
+https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7459728656965913366_ld.flv?expire=1738063921&sign=17923ca32b7bdcade020c99765cfecbc
 #EXTINF:-1 group-title="TikTok Live" tvg-logo="https://www.tiktok.com/favicon.ico" tvg-id="simpleTVFakeEpgId" $ExtFilter="Tikitok live",eosforos_._666
-https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7459713583996898070_ld.flv?expire=1738062444&sign=bcffdef3c3ed8a55da7f6b86a3376224
+https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7459713583996898070_ld.flv?expire=1738063922&sign=a607ebb2a3fb19123a4a4c69d10522f3
 #EXTINF:-1 group-title="TikTok Live" tvg-logo="https://www.tiktok.com/favicon.ico" tvg-id="simpleTVFakeEpgId" $ExtFilter="Tikitok live",.anastasiaa_official
-https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7459720894613654295_ld.flv?expire=1738062447&sign=bc65caeff478285d2c6a7fd735bc507d
+https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7459720894613654295_ld.flv?expire=1738063924&sign=85cb033f15ab66cab0b040015b749617
+#EXTINF:-1 group-title="TikTok Live" tvg-logo="https://www.tiktok.com/favicon.ico" tvg-id="simpleTVFakeEpgId" $ExtFilter="Tikitok live",poparatsaklidou
+https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7459730793218902806_ld.flv?expire=1738063973&sign=c913448373a924cf8b2e03faa695a3b1
 #EXTINF:-1 group-title="TikTok Live" tvg-logo="https://www.tiktok.com/favicon.ico" tvg-id="simpleTVFakeEpgId" $ExtFilter="Tikitok live",mimi.m1m1ka
 https://pull-f5-tt03.tiktokcdn-us.com/stage/stream-3287092148780139389_ld.flv
 #EXTINF:-1 group-title="TikTok Live" tvg-logo="https://www.tiktok.com/favicon.ico" tvg-id="simpleTVFakeEpgId" $ExtFilter="Tikitok live",focusfm103.6
-https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7459725870354205462_ld.flv?expire=1738062517&sign=827b16500074ffc00fea5dde64467504
+https://pull-f5-tt04.tiktokcdn-us.com/stage/stream-7459725870354205462_ld.flv?expire=1738064021&sign=e04f25f4b028895b9d2293302af61f07
