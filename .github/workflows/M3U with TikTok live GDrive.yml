@@ -52,10 +52,14 @@ jobs:
           # Εγκατάσταση του gdrive CLI εργαλείου
           curl -L -o gdrive https://github.com/prasmussen/gdrive/releases/download/2.1.0/gdrive-linux-x64
           chmod +x gdrive
-          sudo install gdrive /usr/local/bin/gdrive
+          sudo mv gdrive /usr/local/bin/gdrive
           
-          # Αποθήκευση των credentials σε αρχείο
+          # Έλεγχος ότι το gdrive εγκαταστάθηκε σωστά
+          gdrive version
+          
+          # Έλεγχος ότι το αρχείο gdrive_secret.json δημιουργήθηκε σωστά
           echo "${GDRIVE_SECRET}" > gdrive_secret.json
+          cat gdrive_secret.json
           
           # Ανέβασμα του αρχείου στο Google Drive
-          ./gdrive upload --parent ${GDRIVE_FOLDER_ID} tiktok_live.m3u --service-account gdrive_secret.json
+          gdrive upload --parent ${GDRIVE_FOLDER_ID} tiktok_live.m3u --service-account gdrive_secret.json
