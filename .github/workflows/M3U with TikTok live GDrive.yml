@@ -51,7 +51,8 @@ jobs:
         run: |
           # Εγκατάσταση του gdrive CLI εργαλείου
           echo "Downloading gdrive..."
-          curl -L -o gdrive https://github.com/gdrive-org/gdrive/releases/download/2.1.0/gdrive-linux-x64
+          curl -L -o gdrive https://github.com/prasmussen/gdrive/releases/download/2.1.0/gdrive-linux-x64
+          echo "Downloaded gdrive file details:"
           file gdrive
           chmod +x gdrive
           sudo mv gdrive /usr/local/bin/gdrive
