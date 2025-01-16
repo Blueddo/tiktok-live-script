@@ -31,22 +31,16 @@ jobs:
         run: |
          ls -la # Εμφάνιση των περιεχομένων του τρέχοντος φακέλου
 
-      - name: Commit and push changes to public repository
+      - name: Install gdrive
         run: |
-          git clone https://github.com/Blueddo/Bluelist.git public_repo # Κλωνοποίηση του δημόσιου αποθετηρίου
-          cp tiktok_live.m3u public_repo/tiktok_live.m3u # Αντιγραφή του αρχείου M3U στο δημόσιο αποθετήριο
-          cd public_repo
-          git config --global user.name 'github-actions[bot]' # Ρύθμιση του ονόματος χρήστη για το git
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com' # Ρύθμιση του email για το git
-          git add tiktok_live.m3u # Προσθήκη του αρχείου M3U στο git
-          git commit -m 'Update M3U playlist' # Δημιουργία commit με το μήνυμα 'Update M3U playlist'
-          git push https://Blueddo:${{ secrets.PUBLIC_REPO_PAT }}@github.com/Blueddo/Bluelist.git # Push των αλλαγών στο δημόσιο αποθετήριο
-        env:
-          PUBLIC_REPO_PAT: ${{ secrets.PUBLIC_REPO_PAT }} # Το Personal Access Token (PAT) ως περιβαλλοντική μεταβλητή
+          curl -L -o gdrive https://github.com/prasmussen/gdrive/releases/download/2.1.0/gdrive-linux-x64
+          chmod +x gdrive
+          sudo install gdrive /usr/local/bin/gdrive # Εγκατάσταση του gdrive CLI εργαλείου
 
       - name: Upload to Google Drive
-        uses: abhishekshree/google-drive-upload@v1
-        with:
-          folder-id: ${{ secrets.GDRIVE_FOLDER_ID }} # Το ID του φακέλου στο Google Drive
-          credentials-json: ${{ secrets.GDRIVE_SECRET }} # Το JSON αρχείο των credentials
-          file: tiktok_live.m3u # Το αρχείο που θα ανέβει στο Google Drive
+        env:
+          GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }} # Το ID του φακέλου στο Google Drive
+          GDRIVE_SECRET: ${{ secrets.GDRIVE_SECRET }} # Το JSON αρχείο των credentials
+        run: |
+          echo "${GDRIVE_SECRET}" > gdrive_secret.json
+          gdrive upload --parent ${GDRIVE_FOLDER_ID} tiktok_live.m3u --service-account gdrive_secret.json # Ανέβασμα του αρχείου στο Google Drive
