@@ -50,16 +50,25 @@ jobs:
           GDRIVE_SECRET: ${{ secrets.GDRIVE_SECRET }} # Το JSON αρχείο των credentials
         run: |
           # Εγκατάσταση του gdrive CLI εργαλείου
+          echo "Downloading gdrive..."
           curl -L -o gdrive https://github.com/prasmussen/gdrive/releases/download/2.1.0/gdrive-linux-x64
           chmod +x gdrive
           sudo mv gdrive /usr/local/bin/gdrive
           
           # Έλεγχος ότι το gdrive εγκαταστάθηκε σωστά
+          echo "Verifying gdrive installation..."
+          if ! command -v gdrive &> /dev/null
+          then
+              echo "gdrive could not be found"
+              exit 1
+          fi
           gdrive version
           
-          # Έλεγχος ότι το αρχείο gdrive_secret.json δημιουργήθηκε σωστά
+          # Αποθήκευση των credentials σε αρχείο
+          echo "Creating gdrive_secret.json..."
           echo "${GDRIVE_SECRET}" > gdrive_secret.json
           cat gdrive_secret.json
           
           # Ανέβασμα του αρχείου στο Google Drive
+          echo "Uploading tiktok_live.m3u to Google Drive..."
           gdrive upload --parent ${GDRIVE_FOLDER_ID} tiktok_live.m3u --service-account gdrive_secret.json
