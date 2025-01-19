@@ -5,17 +5,17 @@ from termcolor import colored
 
 # Συνάρτηση φόρτωσης χρηστών από αρχείο
 def load_users():
-    users = set()  # Χρήση συνόλου για αποφυγή διπλοτύπων
+    users = []
     try:
         with open("userstiktok.txt", "r") as file:
             for line in file:
-                users.add(line.strip())
-        print(f"Φορτώθηκαν {len(users)} μοναδικοί χρήστες από το αρχείο userstiktok.txt.")
+                users.append(line.strip())
+        print(f"Φορτώθηκαν {len(users)} χρήστες από το αρχείο userstiktok.txt.")
     except FileNotFoundError:
         print("Το αρχείο userstiktok.txt δεν βρέθηκε.")
     except Exception as e:
         print(f"Σφάλμα κατά την ανάγνωση του αρχείου: {e}")
-    return list(users)  # Επιστροφή της λίστας των μοναδικών χρηστών
+    return users
 
 # Συνάρτηση για έλεγχο αν ο χρήστης είναι live
 def check_user_live(user):
