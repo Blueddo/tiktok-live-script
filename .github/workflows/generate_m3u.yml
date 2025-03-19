@@ -57,14 +57,14 @@ jobs:
 
       - name: Δέσμευση και προώθηση των αλλαγών στο δημόσιο αποθετήριο
         run: |
-          git clone https://github.com/Blueddo2/Bluelist.git public_repo
+          git clone https://github.com/Blueddo/Bluelist.git public_repo
           cp tiktok_live.m3u public_repo/tiktok_live.m3u
           cd public_repo
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add tiktok_live.m3u
           git commit -m 'Update M3U playlist'
-          git push https://Blueddo:${{ secrets.PUBLIC_REPO_PAT }}@github.com/Blueddo2/Bluelist.git
+          git push https://Blueddo:${{ secrets.PUBLIC_REPO_PAT }}@github.com/Blueddo/Bluelist.git
         env:
           PUBLIC_REPO_PAT: ${{ secrets.PUBLIC_REPO_PAT }}
 
@@ -104,13 +104,13 @@ jobs:
 
       - name: Δέσμευση και προώθηση των αλλαγών στο δημόσιο αποθετήριο
         run: |
-          git clone https://github.com/Blueddo/Bluelist.git public_repo
+          git clone https://github.com/Blueddo2/Bluelist.git public_repo
           cp tiktok_live.m3u public_repo/tiktok_live.m3u
           cd public_repo
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add tiktok_live.m3u
           git commit -m 'Update M3U playlist'
-          git push https://Blueddo:${{ secrets.PUBLIC_REPO_PAT_ALT }}@github.com/Blueddo/Bluelist.git
+          git push https://Blueddo:${{ secrets.PUBLIC_REPO_PAT_ALT }}@github.com/Blueddo2/Bluelist.git
         env:
           PUBLIC_REPO_PAT_ALT: ${{ secrets.PUBLIC_REPO_PAT_ALT }}
