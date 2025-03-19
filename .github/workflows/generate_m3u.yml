@@ -1,5 +1,5 @@
-name: Δημιουργία M3U και αντιγραφή M3U στο δημόσιο αποθετήριο
-# Δημιουργία M3U και αντιγραφή M3U στο δημόσιο αποθετήριο
+name: Δημιουργία M3U και προσθήκη σε δημόσιο αποθετήριο
+# Δημιουργία M3U και προσθήκη σε δημόσιο αποθετήριο
 on:
   schedule:
     - cron: "0 * * * *"  # Εκτέλεση κάθε ώρα στις :00 
@@ -12,14 +12,14 @@ jobs:
     outputs:
       switch_profile: ${{ steps.check-minutes.outputs.switch_profile }}
     steps:
-      - name: Check remaining minutes for primary profile
+      - name: Ελέγξτε τα εναπομείναντα λεπτά για το πρωτεύον προφίλ
         id: check-minutes
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           remaining_minutes=$(gh api /rate_limit | jq .rate.remaining)
           echo "Remaining minutes: $remaining_minutes"
-          if [ "$remaining_minutes" -lt 2000 ]; then
+          if [ "$remaining_minutes" -lt 2000]; then
             echo "switch_profile=true" >> $GITHUB_ENV
           else
             echo "switch_profile=false" >> $GITHUB_ENV
@@ -30,8 +30,8 @@ jobs:
     needs: check-minutes
     if: ${{ needs.check-minutes.outputs.switch_profile }} == 'false'
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Έλεγχος αποθετηρίου
+        uses: actions/checkout@v4
 
       - name: Πακέτα cache python
         uses: actions/cache@v4
@@ -42,7 +42,7 @@ jobs:
             ${{ runner.os }}-pip-
 
       - name: Ρύθμιση Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12' # Χρησιμοποίησε την έκδοση Python που χρειάζεται το σκριπτ σου
 
@@ -77,8 +77,8 @@ jobs:
     needs: check-minutes
     if: ${{ needs.check-minutes.outputs.switch_profile }} == 'true'
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Έλεγχος αποθετηρίου
+        uses: actions/checkout@v4
 
       - name: Πακέτα cache python
         uses: actions/cache@v4
@@ -89,7 +89,7 @@ jobs:
             ${{ runner.os }}-pip-
 
       - name: Ρύθμιση Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
