@@ -7,28 +7,28 @@ on:
   workflow_dispatch: # Επιτρέπει την εκτέλεση του workflow χειροκίνητα από το GitHub UI
 
 jobs:
-  ελεγχος-λεπτων:
+  check_minutes:
     runs-on: ubuntu-latest
     outputs:
-      switch_profile: ${{ steps.ελεγχος-λεπτων.outputs.switch_profile }}
+      switch_profile: ${{ steps.check_minutes.outputs.switch_profile }}
     steps:
       - name: Ελέγξτε τα εναπομείναντα λεπτά για το πρωτεύον προφίλ
-        id: ελεγχος-λεπτων
+        id: check_minutes
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           remaining_minutes=$(gh api /rate_limit | jq .rate.remaining)
           echo "Remaining minutes: $remaining_minutes"
-          if [ "$remaining_minutes" -lt 2000]; then
+          if [ "$remaining_minutes" -lt 2000 ]; then
             echo "switch_profile=true" >> $GITHUB_ENV
           else
             echo "switch_profile=false" >> $GITHUB_ENV
           fi
         
-  δημιουργια-m3u:
+  generate_m3u:
     runs-on: ubuntu-20.04-large # Χρήση μεγαλύτερου runner για βελτιωμένη απόδοση
-    needs: ελεγχος-λεπτων
-    if: ${{ needs.ελεγχος-λεπτων.outputs.switch_profile }} == 'false'
+    needs: check_minutes
+    if: ${{ needs.check_minutes.outputs.switch_profile }} == 'false'
     steps:
       - name: Έλεγχος αποθετηρίου
         uses: actions/checkout@v4
@@ -72,10 +72,10 @@ jobs:
         env:
           PUBLIC_REPO_PAT: ${{ secrets.PUBLIC_REPO_PAT }}
 
-  δημιουργια-m3u-alt:
+  generate_m3u_alt:
     runs-on: ubuntu-20.04-large # Χρήση μεγαλύτερου runner για βελτιωμένη απόδοση
-    needs: ελεγχος-λεπτων
-    if: ${{ needs.ελεγχος-λεπτων.outputs.switch_profile }} == 'true'
+    needs: check_minutes
+    if: ${{ needs.check_minutes.outputs.switch_profile }} == 'true'
     steps:
       - name: Έλεγχος αποθετηρίου
         uses: actions/checkout@v4
@@ -119,7 +119,7 @@ jobs:
         env:
           PUBLIC_REPO_PAT_ALT: ${{ secrets.PUBLIC_REPO_PAT_ALT }}
 
-  ανενεργα-issues:
+  stale_issues:
     runs-on: ubuntu-latest
     steps:
       - name: Σήμανση ανενεργών issues και pull requests
