@@ -26,7 +26,7 @@ jobs:
           fi
         
   generate_m3u:
-    runs-on: ubuntu-20.04-large # Χρήση μεγαλύτερου runner για βελτιωμένη απόδοση
+    runs-on: ubuntu-latest # Χρήση μεγαλύτερου runner για βελτιωμένη απόδοση
     needs: check_minutes
     if: ${{ needs.check_minutes.outputs.switch_profile }} == 'false'
     steps:
@@ -73,7 +73,7 @@ jobs:
           PUBLIC_REPO_PAT: ${{ secrets.PUBLIC_REPO_PAT }}
 
   generate_m3u_alt:
-    runs-on: ubuntu-20.04-large # Χρήση μεγαλύτερου runner για βελτιωμένη απόδοση
+    runs-on: ubuntu-latest # Χρήση μεγαλύτερου runner για βελτιωμένη απόδοση
     needs: check_minutes
     if: ${{ needs.check_minutes.outputs.switch_profile }} == 'true'
     steps:
