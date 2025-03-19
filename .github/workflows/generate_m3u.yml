@@ -7,13 +7,13 @@ on:
   workflow_dispatch: # Επιτρέπει την εκτέλεση του workflow χειροκίνητα από το GitHub UI
 
 jobs:
-  check-minutes:
+  ελεγχος-λεπτων:
     runs-on: ubuntu-latest
     outputs:
-      switch_profile: ${{ steps.check-minutes.outputs.switch_profile }}
+      switch_profile: ${{ steps.ελεγχος-λεπτων.outputs.switch_profile }}
     steps:
       - name: Ελέγξτε τα εναπομείναντα λεπτά για το πρωτεύον προφίλ
-        id: check-minutes
+        id: ελεγχος-λεπτων
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -25,15 +25,15 @@ jobs:
             echo "switch_profile=false" >> $GITHUB_ENV
           fi
         
-  generate-m3u:
-    runs-on: ubuntu-latest
-    needs: check-minutes
-    if: ${{ needs.check-minutes.outputs.switch_profile }} == 'false'
+  δημιουργια-m3u:
+    runs-on: ubuntu-20.04-large # Χρήση μεγαλύτερου runner για βελτιωμένη απόδοση
+    needs: ελεγχος-λεπτων
+    if: ${{ needs.ελεγχος-λεπτων.outputs.switch_profile }} == 'false'
     steps:
       - name: Έλεγχος αποθετηρίου
         uses: actions/checkout@v4
 
-      - name: Πακέτα cache python
+      - name: Πακέτα cache Python
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
@@ -72,15 +72,15 @@ jobs:
         env:
           PUBLIC_REPO_PAT: ${{ secrets.PUBLIC_REPO_PAT }}
 
-  generate-m3u-alt:
-    runs-on: ubuntu-latest
-    needs: check-minutes
-    if: ${{ needs.check-minutes.outputs.switch_profile }} == 'true'
+  δημιουργια-m3u-alt:
+    runs-on: ubuntu-20.04-large # Χρήση μεγαλύτερου runner για βελτιωμένη απόδοση
+    needs: ελεγχος-λεπτων
+    if: ${{ needs.ελεγχος-λεπτων.outputs.switch_profile }} == 'true'
     steps:
       - name: Έλεγχος αποθετηρίου
         uses: actions/checkout@v4
 
-      - name: Πακέτα cache python
+      - name: Πακέτα cache Python
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
@@ -118,3 +118,15 @@ jobs:
           git push https://Blueddo2:${{ secrets.PUBLIC_REPO_PAT_ALT }}@github.com/Blueddo2/Bluelist.git
         env:
           PUBLIC_REPO_PAT_ALT: ${{ secrets.PUBLIC_REPO_PAT_ALT }}
+
+  ανενεργα-issues:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Σήμανση ανενεργών issues και pull requests
+        uses: actions/stale@v7
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          stale-issue-message: 'This issue has been automatically marked as stale because it has not had recent activity. It will be closed if no further activity occurs.'
+          stale-pr-message: 'This pull request has been automatically marked as stale because it has not had recent activity. It will be closed if no further activity occurs.'
+          days-before-stale: 30
+          days-before-close: 7
