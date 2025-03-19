@@ -1,4 +1,4 @@
-name: Δημιουργία M3U και αντιγραφή M3U στο δημόσιο αποθετήριο
+name: Δημιουργία M3U και αντιγραφή στο δημόσιο αποθετήριο
 # Δημιουργία M3U και αντιγραφή M3U στο δημόσιο αποθετήριο
 on:
   schedule:
@@ -12,19 +12,21 @@ jobs:
     steps:
       - name: Check remaining minutes
         id: check-minutes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           remaining_minutes=$(gh api /rate_limit | jq .rate.remaining)
           echo "Remaining minutes: $remaining_minutes"
           if [ "$remaining_minutes" -lt 2000 ]; then
-            echo "::set-output name=switch_profile::true"
+            echo "switch_profile=true" >> $GITHUB_ENV
           else
-            echo "::set-output name=switch_profile::false"
+            echo "switch_profile=false" >> $GITHUB_ENV
           fi
 
   generate-m3u:
     runs-on: ubuntu-latest
     needs: check-minutes
-    if: needs.check-minutes.outputs.switch_profile == 'false'
+    if: env.switch_profile == 'false'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -71,7 +73,7 @@ jobs:
   generate-m3u-alt:
     runs-on: ubuntu-latest
     needs: check-minutes
-    if: needs.check-minutes.outputs.switch_profile == 'true'
+    if: env.switch_profile == 'true'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
