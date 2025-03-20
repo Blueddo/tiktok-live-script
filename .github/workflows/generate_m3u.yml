@@ -8,7 +8,7 @@ on:
 
 jobs:
   generate_m3u:
-    runs-on: ubuntu-latest # runner
+    runs-on: ubuntu-latest # Χρήση μεγαλύτερου runner για βελτιωμένη απόδοση
     steps:
       - name: Ελέγξτε τα εναπομείναντα λεπτά για τα προφίλ
         id: check_minutes
@@ -30,7 +30,6 @@ jobs:
           else
             echo "Using primary profile"
             echo "switch_profile=false" >> $GITHUB_ENV
-          fi
 
       - name: Έλεγχος αποθετηρίου
         uses: actions/checkout@v4
@@ -64,14 +63,14 @@ jobs:
       - name: Δέσμευση και προώθηση των αλλαγών στο δημόσιο αποθετήριο
         run: |
           if [ "${{ env.switch_profile }}" == "true" ]; then
-            git clone https://github.com/Blueddo2/Bluelist.git public_repo
+            git clone https://github.com/Blueddo/Bluelist.git public_repo
             cd public_repo
             git config --global user.name 'github-actions[bot]'
             git config --global user.email 'github-actions[bot]@users.noreply.github.com'
             cp ../tiktok_live.m3u tiktok_live.m3u
             git add tiktok_live.m3u
             git commit -m 'Update M3U playlist'
-            git push https://Blueddo2:${{ secrets.PUBLIC_REPO_PAT_ALT }}@github.com/Blueddo2/Bluelist.git
+            git push https://Blueddo:${{ secrets.PUBLIC_REPO_PAT_ALT }}@github.com/Blueddo/Bluelist.git
           else
             git clone https://github.com/Blueddo/Bluelist.git public_repo
             cd public_repo
