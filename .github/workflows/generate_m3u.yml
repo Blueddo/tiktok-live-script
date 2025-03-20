@@ -23,6 +23,7 @@ jobs:
           else
             echo "Using primary profile"
             echo "switch_profile=false" >> $GITHUB_ENV
+          fi
 
       - name: Έλεγχος αποθετηρίου
         uses: actions/checkout@v4
