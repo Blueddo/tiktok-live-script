@@ -10,20 +10,26 @@ jobs:
   generate_m3u:
     runs-on: ubuntu-latest # Χρήση μεγαλύτερου runner για βελτιωμένη απόδοση
     steps:
-      - name: Ελέγξτε τα εναπομείναντα λεπτά για το πρωτεύον προφίλ
+      - name: Ελέγξτε τα εναπομείναντα λεπτά για τα προφίλ
         id: check_minutes
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ALT_GH_TOKEN: ${{ secrets.ALT_GITHUB_TOKEN }}
         run: |
-          remaining_minutes=$(gh api /rate_limit | jq .rate.remaining)
-          echo "Remaining minutes: $remaining_minutes"
-          if [ "$remaining_minutes" -lt 2000 ]; then
+          primary_remaining_minutes=$(gh api /rate_limit | jq .rate.remaining)
+          echo "Primary remaining minutes: $primary_remaining_minutes"
+          alternate_remaining_minutes=$(GH_TOKEN=${{ secrets.ALT_GITHUB_TOKEN }} gh api /rate_limit | jq .rate.remaining)
+          echo "Alternate remaining minutes: $alternate_remaining_minutes"
+          
+          if [ "$primary_remaining_minutes" -ge 2000 ] && [ "$alternate_remaining_minutes" -ge 2000 ]; then
+            echo "Both profiles have reached the 2000 minutes limit"
+            exit 1  # Exit with an error code to stop the workflow
+          elif [ "$primary_remaining_minutes" -ge 2000 ]; then
             echo "Using alternate profile"
             echo "switch_profile=true" >> $GITHUB_ENV
           else
             echo "Using primary profile"
             echo "switch_profile=false" >> $GITHUB_ENV
-          fi
 
       - name: Έλεγχος αποθετηρίου
         uses: actions/checkout@v4
