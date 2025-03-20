@@ -8,7 +8,7 @@ on:
 
 jobs:
   generate_m3u:
-    runs-on: ubuntu-latest # Χρήση runner
+    runs-on: ubuntu-latest # Χρήση μεγαλύτερου runner για βελτιωμένη απόδοση
     steps:
       - name: Ελέγξτε τα εναπομείναντα λεπτά για το πρωτεύον προφίλ
         id: check_minutes
