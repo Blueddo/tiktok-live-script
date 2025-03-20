@@ -8,7 +8,7 @@ on:
 
 jobs:
   generate_m3u:
-    runs-on: ubuntu-latest # Χρήση μεγαλύτερου runner για βελτιωμένη απόδοση
+    runs-on: ubuntu-latest # runner
     steps:
       - name: Ελέγξτε τα εναπομείναντα λεπτά για τα προφίλ
         id: check_minutes
@@ -30,6 +30,7 @@ jobs:
           else
             echo "Using primary profile"
             echo "switch_profile=false" >> $GITHUB_ENV
+          fi
 
       - name: Έλεγχος αποθετηρίου
         uses: actions/checkout@v4
