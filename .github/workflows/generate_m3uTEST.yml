@@ -17,54 +17,30 @@ jobs: # Δημιουργία της Εργασίας
           ALT_GH_TOKEN: ${{ secrets.ALT_GITHUB_TOKEN }} # Δεύτερο προφίλ
           # Αν το πρώτο προφίλ έχει φτάσει το όριο, χρησιμοποιείται το δεύτερο προφίλ
         run: |
-          # Έλεγχος των εναπομεινάντων λεπτών για το κύριο προφίλ
           primary_remaining_minutes=$(gh api /rate_limit | jq .rate.remaining)
           echo "Κύρια εναπομείναντα λεπτά: $primary_remaining_minutes"
-
-          # Έλεγχος των εναπομεινάντων λεπτών για το εναλλακτικό προφίλ
           alternate_remaining_minutes=$(GH_TOKEN=${{ secrets.ALT_GITHUB_TOKEN }} gh api /rate_limit | jq .rate.remaining)
           echo "Εναλλακτικά εναπομείναντα λεπτά: $alternate_remaining_minutes"
           
-          # Έλεγχος αν και τα δύο προφίλ έχουν φτάσει το όριο των 2000 λεπτών
           if [ "$primary_remaining_minutes" -ge 2000 ] && [ "$alternate_remaining_minutes" -ge 2000 ]; then
             echo "Και τα δύο προφίλ έχουν φτάσει το όριο των 2000 λεπτών"
             echo "Απενεργοποίηση και των δύο προφίλ"
-            # Απενεργοποίηση των tokens και των δύο προφίλ
-            echo "GH_TOKEN=" >> $GITHUB_ENV
-            echo "ALT_GH_TOKEN=" >> $GITHUB_ENV
-            # Απενεργοποίηση του workflow
-            echo "disable_workflow=true" >> $GITHUB_ENV
-
-          # Έλεγχος αν το κύριο προφίλ έχει φτάσει το όριο των 2000 λεπτών
+            # Εδώ βάζουμε τις εντολές για απενεργοποίηση και των δύο προφίλ
+            exit 1  # Έξοδος με κωδικό σφάλματος για να σταματήσει το workflow
           elif [ "$primary_remaining_minutes" -ge 2000 ]; then
             echo "Χρήση εναλλακτικού προφίλ"
             echo "switch_profile=true" >> $GITHUB_ENV
             echo "Απενεργοποίηση κύριου προφίλ"
-            # Απενεργοποίηση του κύριου token
-            echo "GH_TOKEN=" >> $GITHUB_ENV
-
-          # Έλεγχος αν το εναλλακτικό προφίλ έχει φτάσει το όριο των 2000 λεπτών
-          elif [ "$alternate_remaining_minutes" -ge 2000 ]; then
-            echo "Χρήση κύριου προφίλ"
-            echo "switch_profile=false" >> $GITHUB_ENV
-            echo "Απενεργοποίηση εναλλακτικού προφίλ και επανενεργοποίηση κύριου προφίλ"
-            # Απενεργοποίηση του εναλλακτικού token και επανενεργοποίηση του κύριου token
-            echo "ALT_GH_TOKEN=" >> $GITHUB_ENV
-            echo "GH_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
-
-          # Αν κανένα προφίλ δεν έχει φτάσει το όριο, συνεχίζουμε με το κύριο προφίλ
+            # Εδώ βάζουμε την εντολή για απενεργοποίηση του κύριου προφίλ
           else
             echo "Χρήση κύριου προφίλ"
             echo "switch_profile=false" >> $GITHUB_ENV
             echo "Απενεργοποίηση εναλλακτικού προφίλ"
-            # Απενεργοποίηση του εναλλακτικού token
-            echo "ALT_GH_TOKEN=" >> $GITHUB_ENV
+            # Εδώ βάζουμε την εντολή για απενεργοποίηση του εναλλακτικού προφίλ
 
-      # Έλεγχος αποθετηρίου και προετοιμασία περιβάλλοντος
       - name: Έλεγχος αποθετηρίου και προετοιμασία περιβάλλοντος
         uses: actions/checkout@v4
         
-      # Πακέτα cache και ρύθμιση Python
       - name: Πακέτα cache και ρύθμιση Python
         uses: actions/cache@v4
         with:
@@ -73,21 +49,18 @@ jobs: # Δημιουργία της Εργασίας
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      # Ρύθμιση Python
       - name: Ρύθμιση Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
-      # Εγκατάσταση εξαρτήσεων και εκτέλεση σεναρίου
-      - name: Εγκατάσταση εξαρτήσεων και εκτέλεση σεναρίου
+      - name: Εγκατάσταση εξαρτήσεων και εκτέλεση σενάριου
         run: |
           python -m pip install --upgrade pip &
           pip install -r requirements.txt &
           wait
           python generate_m3u.py
 
-      # Δέσμευση και προώθηση των αλλαγών στο δημόσιο αποθετήριο
       - name: Δέσμευση και προώθηση των αλλαγών στο δημόσιο αποθετήριο
         run: |
           git clone https://github.com/Blueddo/Bluelist.git public_repo
@@ -97,7 +70,6 @@ jobs: # Δημιουργία της Εργασίας
           cp ../tiktok_live.m3u tiktok_live.m3u
           git add tiktok_live.m3u
           git commit -m 'Update M3U playlist'
-          # Χρήση του κατάλληλου token για την προώθηση των αλλαγών
           if [ "${{ env.switch_profile }}" == "true" ]; then
             git push https://Blueddo:${{ secrets.PUBLIC_REPO_PAT_ALT }}@github.com/Blueddo/Bluelist.git
           else
