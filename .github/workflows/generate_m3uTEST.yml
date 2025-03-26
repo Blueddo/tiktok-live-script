@@ -15,7 +15,6 @@ jobs: # Δημιουργία της Εργασίας
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Πρώτο προφίλ:
           ALT_GH_TOKEN: ${{ secrets.ALT_GITHUB_TOKEN }} # Δεύτερο προφίλ
-          # Αν το πρώτο προφίλ έχει φτάσει το όριο, χρησιμοποιείται το δεύτερο προφίλ
         run: |
           # Έλεγχος των εναπομεινάντων λεπτών για το κύριο προφίλ
           primary_remaining_minutes=$(gh api /rate_limit | jq .rate.remaining)
@@ -28,10 +27,6 @@ jobs: # Δημιουργία της Εργασίας
           # Έλεγχος αν και τα δύο προφίλ έχουν φτάσει το όριο των 2000 λεπτών
           if [ "$primary_remaining_minutes" -ge 2000 ] && [ "$alternate_remaining_minutes" -ge 2000 ]; then
             echo "Και τα δύο προφίλ έχουν φτάσει το όριο των 2000 λεπτών"
-            echo "Απενεργοποίηση και των δύο προφίλ"
-            # Απενεργοποίηση των tokens και των δύο προφίλ
-            echo "GH_TOKEN=" >> $GITHUB_ENV
-            echo "ALT_GH_TOKEN=" >> $GITHUB_ENV
             # Απενεργοποίηση του workflow
             echo "disable_workflow=true" >> $GITHUB_ENV
 
@@ -39,26 +34,27 @@ jobs: # Δημιουργία της Εργασίας
           elif [ "$primary_remaining_minutes" -ge 2000 ]; then
             echo "Χρήση εναλλακτικού προφίλ"
             echo "switch_profile=true" >> $GITHUB_ENV
-            echo "Απενεργοποίηση κύριου προφίλ"
-            # Απενεργοποίηση του κύριου token
-            echo "GH_TOKEN=" >> $GITHUB_ENV
 
           # Έλεγχος αν το εναλλακτικό προφίλ έχει φτάσει το όριο των 2000 λεπτών
           elif [ "$alternate_remaining_minutes" -ge 2000 ]; then
             echo "Χρήση κύριου προφίλ"
             echo "switch_profile=false" >> $GITHUB_ENV
-            echo "Απενεργοποίηση εναλλακτικού προφίλ και επανενεργοποίηση κύριου προφίλ"
-            # Απενεργοποίηση του εναλλακτικού token και επανενεργοποίηση του κύριου token
-            echo "ALT_GH_TOKEN=" >> $GITHUB_ENV
+            echo "Επανενεργοποίηση κύριου προφίλ και απενεργοποίηση εναλλακτικού προφίλ"
             echo "GH_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+            echo "ALT_GH_TOKEN=" >> $GITHUB_ENV
+
+          # Αν το εναλλακτικό προφίλ είχε φτάσει το όριο των 2000 λεπτών και το κύριο προφίλ έχει ξαναφτάσει το όριο, επανενεργοποιούμε το εναλλακτικό προφίλ
+          elif [ "$primary_remaining_minutes" -ge 2000 ] && [ "$alternate_remaining_minutes" -lt 2000 ]; then
+            echo "Χρήση εναλλακτικού προφίλ"
+            echo "switch_profile=true" >> $GITHUB_ENV
+            echo "Επανενεργοποίηση εναλλακτικού προφίλ και απενεργοποίηση κύριου προφίλ"
+            echo "GH_TOKEN=" >> $GITHUB_ENV
+            echo "ALT_GH_TOKEN=${{ secrets.ALT_GITHUB_TOKEN }}" >> $GITHUB_ENV
 
           # Αν κανένα προφίλ δεν έχει φτάσει το όριο, συνεχίζουμε με το κύριο προφίλ
           else
             echo "Χρήση κύριου προφίλ"
             echo "switch_profile=false" >> $GITHUB_ENV
-            echo "Απενεργοποίηση εναλλακτικού προφίλ"
-            # Απενεργοποίηση του εναλλακτικού token
-            echo "ALT_GH_TOKEN=" >> $GITHUB_ENV
 
       # Έλεγχος αποθετηρίου και προετοιμασία περιβάλλοντος
       - name: Έλεγχος αποθετηρίου και προετοιμασία περιβάλλοντος
