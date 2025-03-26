@@ -13,17 +13,17 @@ jobs: # Δημιουργία της Εργασίας
       - name: Έλεγχος των Εναπομεινάντων Λεπτών για τα Προφίλ
         id: check_minutes
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Πρώτο προφίλ:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Πρώτο προφίλ
           ALT_GH_TOKEN: ${{ secrets.ALT_GITHUB_TOKEN }} # Δεύτερο προφίλ
         run: |
           # Έλεγχος των εναπομεινάντων λεπτών για το κύριο προφίλ
-          primary_remaining_minutes=$(gh api /rate_limit | jq .rate.remaining)
+          primary_remaining_minutes=$(GH_TOKEN=${{ secrets.GITHUB_TOKEN }} gh api /rate_limit | jq .rate.remaining)
           echo "Κύρια εναπομείναντα λεπτά: $primary_remaining_minutes"
 
           # Έλεγχος των εναπομεινάντων λεπτών για το εναλλακτικό προφίλ
           alternate_remaining_minutes=$(GH_TOKEN=${{ secrets.ALT_GITHUB_TOKEN }} gh api /rate_limit | jq .rate.remaining)
           echo "Εναλλακτικά εναπομείναντα λεπτά: $alternate_remaining_minutes"
-
+          
           # Έλεγχος αν και τα δύο προφίλ έχουν φτάσει το όριο των 2000 λεπτών
           if [ "$primary_remaining_minutes" -le 2000 ] && [ "$alternate_remaining_minutes" -le 2000 ]; then
             echo "Και τα δύο προφίλ έχουν φτάσει το όριο των 2000 λεπτών"
