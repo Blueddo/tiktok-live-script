@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest # Χρήση μεγαλύτερου runner για βελτιωμένη απόδοση
     steps:
       - name: Έναρξη χρονομέτρησης για check_minutes
-        run: echo "Start time for check_minutes: $(date +%s)"
+        run: echo "Start time for check_minutes: $(date +%s)" > start_check_minutes.txt
 
       - name: Ελέγξτε τα εναπομείναντα λεπτά για τα προφίλ
         id: check_minutes
@@ -36,10 +36,10 @@ jobs:
           fi
 
       - name: Λήξη χρονομέτρησης για check_minutes
-        run: echo "End time for check_minutes: $(date +%s)"
+        run: echo "End time for check_minutes: $(date +%s)" > end_check_minutes.txt
 
       - name: Έναρξη χρονομέτρησης για setup_python
-        run: echo "Start time for setup_python: $(date +%s)"
+        run: echo "Start time for setup_python: $(date +%s)" > start_setup_python.txt
 
       - name: Ρύθμιση και εγκατάσταση Python
         if: env.disable_workflow != 'true'
@@ -48,20 +48,20 @@ jobs:
           python-version: '3.12' # Χρησιμοποίησε την έκδοση Python που χρειάζεται το σκριπτ σου
 
       - name: Λήξη χρονομέτρησης για setup_python
-        run: echo "End time for setup_python: $(date +%s)"
+        run: echo "End time for setup_python: $(date +%s)" > end_setup_python.txt
 
       - name: Έναρξη χρονομέτρησης για checkout
-        run: echo "Start time for checkout: $(date +%s)"
+        run: echo "Start time for checkout: $(date +%s)" > start_checkout.txt
 
       - name: Έλεγχος αποθετηρίου
         if: env.disable_workflow != 'true'
         uses: actions/checkout@v4
 
       - name: Λήξη χρονομέτρησης για checkout
-        run: echo "End time for checkout: $(date +%s)"
+        run: echo "End time for checkout: $(date +%s)" > end_checkout.txt
 
       - name: Έναρξη χρονομέτρησης για cache
-        run: echo "Start time for cache: $(date +%s)"
+        run: echo "Start time for cache: $(date +%s)" > start_cache.txt
 
       - name: Πακέτα cache Python
         if: env.disable_workflow != 'true'
@@ -73,10 +73,10 @@ jobs:
             ${{ runner.os }}-pip-
 
       - name: Λήξη χρονομέτρησης για cache
-        run: echo "End time for cache: $(date +%s)"
+        run: echo "End time for cache: $(date +%s)" > end_cache.txt
 
       - name: Έναρξη χρονομέτρησης για install_dependencies
-        run: echo "Start time for install_dependencies: $(date +%s)"
+        run: echo "Start time for install_dependencies: $(date +%s)" > start_install_dependencies.txt
 
       - name: Εγκατάσταση εξαρτήσεων
         if: env.disable_workflow != 'true'
@@ -85,20 +85,20 @@ jobs:
           pip install -r requirements.txt
 
       - name: Λήξη χρονομέτρησης για install_dependencies
-        run: echo "End time for install_dependencies: $(date +%s)"
+        run: echo "End time for install_dependencies: $(date +%s)" > end_install_dependencies.txt
 
       - name: Έναρξη χρονομέτρησης για run_script
-        run: echo "Start time for run_script: $(date +%s)"
+        run: echo "Start time for run_script: $(date +%s)" > start_run_script.txt
 
       - name: Εκτέλεση σενάριου generate_m3u.py
         if: env.disable_workflow != 'true'
         run: python generate_m3u.py
 
       - name: Λήξη χρονομέτρησης για run_script
-        run: echo "End time for run_script: $(date +%s)"
+        run: echo "End time for run_script: $(date +%s)" > end_run_script.txt
 
       - name: Έναρξη χρονομέτρησης για commit_and_push
-        run: echo "Start time for commit_and_push: $(date +%s)"
+        run: echo "Start time for commit_and_push: $(date +%s)" > start_commit_and_push.txt
 
       - name: Δέσμευση και προώθηση των αλλαγών στο δημόσιο αποθετήριο
         if: env.disable_workflow != 'true'
@@ -120,4 +120,4 @@ jobs:
           PUBLIC_REPO_PAT_ALT: ${{ secrets.PUBLIC_REPO_PAT_ALT }}
 
       - name: Λήξη χρονομέτρησης για commit_and_push
-        run: echo "End time for commit_and_push: $(date +%s)"
+        run: echo "End time for commit_and_push: $(date +%s)" > end_commit_and_push.txt
