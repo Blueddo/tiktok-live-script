@@ -10,6 +10,9 @@ jobs:
   generate_m3u:
     runs-on: ubuntu-latest # Χρήση μεγαλύτερου runner για βελτιωμένη απόδοση
     steps:
+      - name: Έναρξη χρονομέτρησης για check_minutes
+        run: echo "Start time for check_minutes: $(date +%s)"
+
       - name: Ελέγξτε τα εναπομείναντα λεπτά για τα προφίλ
         id: check_minutes
         env:
@@ -32,10 +35,22 @@ jobs:
             echo "switch_profile=false" >> $GITHUB_ENV
           fi
 
+      - name: Λήξη χρονομέτρησης για check_minutes
+        run: echo "End time for check_minutes: $(date +%s)"
+
+      - name: Έναρξη χρονομέτρησης για checkout
+        run: echo "Start time for checkout: $(date +%s)"
+
       - name: Ρύθμιση και εγκατάσταση Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12' # Χρησιμοποίησε την έκδοση Python που χρειάζεται το σκριπτ σου
+
+      - name: Λήξη χρονομέτρησης για checkout
+        run: echo "End time for checkout: $(date +%s)"
+
+      - name: Έναρξη χρονομέτρησης για cache
+        run: echo "Start time for cache: $(date +%s)"
 
       - name: Έλεγχος αποθετηρίου και εγκατάσταση εξαρτήσεων
         uses: actions/checkout@v4
@@ -46,13 +61,32 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
+
+      - name: Λήξη χρονομέτρησης για cache
+        run: echo "End time for cache: $(date +%s)"
+
+      - name: Έναρξη χρονομέτρησης για install_dependencies
+        run: echo "Start time for install_dependencies: $(date +%s)"
+
       - name: Εγκατάσταση εξαρτήσεων
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Λήξη χρονομέτρησης για install_dependencies
+        run: echo "End time for install_dependencies: $(date +%s)"
+
+      - name: Έναρξη χρονομέτρησης για run_script
+        run: echo "Start time for run_script: $(date +%s)"
+
       - name: Εκτέλεση σενάριου generate_m3u.py
         run: python generate_m3u.py
+
+      - name: Λήξη χρονομέτρησης για run_script
+        run: echo "End time for run_script: $(date +%s)"
+
+      - name: Έναρξη χρονομέτρησης για commit_and_push
+        run: echo "Start time for commit_and_push: $(date +%s)"
 
       - name: Δέσμευση και προώθηση των αλλαγών στο δημόσιο αποθετήριο
         run: |
@@ -71,3 +105,6 @@ jobs:
         env:
           PUBLIC_REPO_PAT: ${{ secrets.PUBLIC_REPO_PAT }}
           PUBLIC_REPO_PAT_ALT: ${{ secrets.PUBLIC_REPO_PAT_ALT }}
+
+      - name: Λήξη χρονομέτρησης για commit_and_push
+        run: echo "End time for commit_and_push: $(date +%s)"
