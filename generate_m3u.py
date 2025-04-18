@@ -7,12 +7,12 @@ from termcolor import colored
 def load_users():
     users = []
     try:
-        with open("userstwitch.txt", "r") as file:
+        with open("userstiktok.txt", "r") as file:
             for line in file:
                 users.append(line.strip())
-        print(f"Φορτώθηκαν {len(users)} χρήστες από το αρχείο userstwitch.txt.")
+        print(f"Φορτώθηκαν {len(users)} χρήστες από το αρχείο userstiktok.txt.")
     except FileNotFoundError:
-        print("Το αρχείο userstwitch.txt δεν βρέθηκε.")
+        print("Το αρχείο userstiktok.txt δεν βρέθηκε.")
     except Exception as e:
         print(f"Σφάλμα κατά την ανάγνωση του αρχείου: {e}")
     return users
@@ -21,19 +21,19 @@ def load_users():
 def check_user_live(user):
     try:
         result = subprocess.run(
-            ["streamlink", f"https://www.twitch.tv/{user}", "720p", "--stream-url"],
+            ["streamlink", f"https://www.tiktok.com/@{user}", "worst", "--stream-url"],
             capture_output=True, text=True
         )
         output = result.stdout.strip()
         
         if output.startswith("https://"):
             status = colored("είναι σε live", "yellow", "on_blue", attrs=["bold", "blink"])
-            with open("twitch_live.m3u", "a") as m3u_file:
-                m3u_file.write(f"#EXTINF:-1 group-title=\"twitch Live\" tvg-logo=\"https://i.imgur.com/OQIOzbI.png\" tvg-id=\"simpleTVFakeEpgId\" $ExtFilter=\"Twitch live\",{user}\n")
+            with open("tiktok_live.m3u", "a") as m3u_file:
+                m3u_file.write(f"#EXTINF:-1 group-title=\"TikTok Live\" tvg-logo=\"https://www.tiktok.com/favicon.ico\" tvg-id=\"simpleTVFakeEpgId\" $ExtFilter=\"Tikitok live\",{user}\n")
                 m3u_file.write(f"{output}\n")
             return f"Έλεγχος χρήστη: {user} - {status}"
         else:
-            return f"Έλεγχος χρήστη: {user} - δεν υπάρχει διεύθυνση ροής"
+            return f"Έλεγχος χρήστη: {user} - δεν είναι σε live"
     except Exception as e:
         return f"Σφάλμα κατά τον έλεγχο του χρήστη {user}: {e}"
 
