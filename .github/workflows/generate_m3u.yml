@@ -1,15 +1,27 @@
 name: Δημιουργία M3U και προσθήκη σε δημόσιο αποθετήριο
-# Δημιουργία M3U και προσθήκη σε δημόσιο αποθετήριο
+# Το workflow θα τρέχει αυτόματα κάθε ώρα και κάθε μισή ώρα
+# και επίσης θα επιτρέπει χειροκίνητη εκτέλεση με επιλογή mode: generate ή tests.
 on:
   schedule:
-    - cron: "0 * * * *"  # Εκτέλεση κάθε ώρα στις :00 
-    - cron: "30 * * * *"  # Εκτέλεση κάθε μισή ώρα στις :30
-  workflow_dispatch: # Επιτρέπει την εκτέλεση του workflow χειροκίνητα από το GitHub UI
+    - cron: "0 * * * *"   # κάθε ώρα στις :00
+    - cron: "30 * * * *"  # κάθε μισή ώρα στις :30
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Επίλεξε τι θα τρέξει: "generate" για M3U ή "tests" για τα tests'
+        required: true
+        default: 'generate'
 
 jobs:
   generate_m3u:
-    runs-on: ubuntu-latest # Χρήση μεγαλύτερου runner για βελτιωμένη απόδοση
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.mode == 'generate')
+    runs-on: ubuntu-latest
     steps:
+      - name: Εγκατάσταση gh και jq (απαραίτητο για το check_minutes)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gh jq
+
       - name: Ελέγξτε τα εναπομείναντα λεπτά για τα προφίλ
         id: check_minutes
         env:
@@ -23,7 +35,7 @@ jobs:
           
           if [ "$primary_remaining_minutes" -ge 2000 ] && [ "$alternate_remaining_minutes" -ge 2000 ]; then
             echo "Both profiles have reached the 2000 minutes limit"
-            exit 1  # Exit with an error code to stop the workflow
+            exit 1  # Σταματάει το workflow αν και τα δύο προφίλ έχουν ξεπεράσει το όριο
           elif [ "$primary_remaining_minutes" -ge 2000 ]; then
             echo "Using alternate profile"
             echo "switch_profile=true" >> $GITHUB_ENV
@@ -46,7 +58,7 @@ jobs:
       - name: Ρύθμιση Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12' # Χρησιμοποίησε την έκδοση Python που χρειάζεται το σκριπτ σου
+          python-version: '3.12'
 
       - name: Εγκατάσταση εξαρτήσεων
         run: |
@@ -59,41 +71,43 @@ jobs:
 
       - name: Εμφάνιση περιεχομένων τρέχοντος καταλόγου
         run: |
-         ls -la
+          ls -la
 
       - name: Δέσμευση και προώθηση των αλλαγών στο δημόσιο αποθετήριο
         run: |
+          git clone https://github.com/Blueddo/Bluelist.git public_repo
+          cd public_repo
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          cp ../tiktok_live.m3u tiktok_live.m3u
+          git add tiktok_live.m3u
+          git commit -m 'Update M3U playlist' || echo "No changes to commit"
           if [ "${{ env.switch_profile }}" == "true" ]; then
-            git clone https://github.com/Blueddo/Bluelist.git public_repo
-            cd public_repo
-            git config --global user.name 'github-actions[bot]'
-            git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-            cp ../tiktok_live.m3u tiktok_live.m3u
-            git add tiktok_live.m3u
-            git commit -m 'Update M3U playlist'
             git push https://Blueddo:${{ secrets.PUBLIC_REPO_PAT_ALT }}@github.com/Blueddo/Bluelist.git
           else
-            git clone https://github.com/Blueddo/Bluelist.git public_repo
-            cd public_repo
-            git config --global user.name 'github-actions[bot]'
-            git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-            cp ../tiktok_live.m3u tiktok_live.m3u
-            git add tiktok_live.m3u
-            git commit -m 'Update M3U playlist'
             git push https://Blueddo:${{ secrets.PUBLIC_REPO_PAT }}@github.com/Blueddo/Bluelist.git
           fi
         env:
           PUBLIC_REPO_PAT: ${{ secrets.PUBLIC_REPO_PAT }}
           PUBLIC_REPO_PAT_ALT: ${{ secrets.PUBLIC_REPO_PAT_ALT }}
 
-  stale_issues:
+  run_tests:
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.mode == 'tests'
     runs-on: ubuntu-latest
     steps:
-      - name: Σήμανση ανενεργών issues και pull requests
-        uses: actions/stale@v7
+      - name: Έλεγχος αποθετηρίου
+        uses: actions/checkout@v4
+
+      - name: Ρύθμιση Python
+        uses: actions/setup-python@v5
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          stale-issue-message: 'This issue has been automatically marked as stale because it has not had recent activity. It will be closed if no further activity occurs.'
-          stale-pr-message: 'This pull request has been automatically marked as stale because it has not had recent activity. It will be closed if no further activity occurs.'
-          days-before-stale: 30
-          days-before-close: 7
+          python-version: '3.12'
+
+      - name: Εγκατάσταση εξαρτήσεων για tests
+        run: |
+          python -m pip install --upgrade pip
+          pip install --no-cache-dir pytest
+
+      - name: Τρέξιμο tests
+        run: |
+          pytest -q tests
