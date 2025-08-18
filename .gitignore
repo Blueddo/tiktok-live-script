@@ -1,0 +1,5 @@
+# ignore debug log and other runtime artifacts
+debug.log
+*.pyc
+__pycache__/
+tiktok_live.m3u

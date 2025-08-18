@@ -1,14 +1,12 @@
 {
-  "quality": "720p",
-  "timeout": 15,
-  "max_workers": 20,
+  "quality": "worst",
+  "timeout": 10,
+  "max_workers": 5,
   "output_file": "tiktok_live.m3u",
-  "users_file": "userstiktok.txt",
-
+  "users_file": "tests/users_test.txt",
   "group_title": "TikTok Live",
   "tvg_logo": "https://www.tiktok.com/favicon.ico",
   "tvg_id": "simpleTVFakeEpgId",
   "ext_filter": "TikTok live",
-
-  "streamlink_args": ["--stream-url", "--http-no-ssl-verify"]
+  "streamlink_args": ["--stream-url"]
 }
