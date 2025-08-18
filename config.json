@@ -1,0 +1,12 @@
+{
+  "quality": "720p",
+  "timeout": 15,
+  "max_workers": 20,
+  "output_file": "tiktok_live.m3u",
+  "users_file": "userstiktok.txt",
+
+  "group_title": "TikTok Live",
+  "tvg_logo": "https://www.tiktok.com/favicon.ico",
+  "tvg_id": "simpleTVFakeEpgId",
+  "ext_filter": "Tikitok live"
+}
