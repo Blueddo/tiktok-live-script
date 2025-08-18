@@ -8,5 +8,7 @@
   "group_title": "TikTok Live",
   "tvg_logo": "https://www.tiktok.com/favicon.ico",
   "tvg_id": "simpleTVFakeEpgId",
-  "ext_filter": "Tikitok live"
+  "ext_filter": "TikTok live",
+
+  "streamlink_args": ["--stream-url", "--http-no-ssl-verify"]
 }
