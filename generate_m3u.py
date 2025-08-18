@@ -60,7 +60,6 @@ print("➡️ Ενεργές ρυθμίσεις:", config)
 
 # -------- Helpers --------
 url_re = re.compile(r"https?://\S+")
-
 write_lock = threading.Lock()
 
 def find_url_in_text(text):
@@ -68,6 +67,18 @@ def find_url_in_text(text):
         return None
     m = url_re.search(text)
     return m.group(0) if m else None
+
+def is_valid_stream_url(url, user):
+    """
+    Απλός έλεγχος: απορρίπτει link προφίλ και αποδέχεται κοινά stream markers.
+    """
+    if not url:
+        return False
+    u = url.strip().lower()
+    if u.startswith(f"https://www.tiktok.com/@{user.lower()}"):
+        return False
+    stream_markers = ("tiktokcdn", "pull-", "/stage/", "/game/", "stream-", ".flv", ".m3u8", ".ts", ".mp4")
+    return any(marker in u for marker in stream_markers)
 
 # -------- Load users --------
 def load_users():
@@ -79,7 +90,7 @@ def load_users():
                 if not line or line.startswith("#"):
                     continue
                 users.append(line)
-        print(f"Φορτώθηκαν {len(users)} χρήστες από το αρχείο {USERS_FILE}.")
+        print(f"Φορτώθηκαν {len(users)} ��ρήστες από το αρχείο {USERS_FILE}.")
     except FileNotFoundError:
         print(f"Το αρχείο {USERS_FILE} δεν βρέθηκε.")
     except Exception as e:
@@ -89,62 +100,71 @@ def load_users():
 # -------- Check user live --------
 def run_streamlink_and_get_url(user, quality):
     """
-    Τρέχει streamlink και επιστρέφει URL αν βρεθεί, αλλιώς None.
-    Επιστρέφει επίσης debug info (returncode, stdout, stderr).
+    Επιστρέφει (url, returncode, stdout, stderr, reason)
+    reason = None αν όλα καλά, αλλιώς 'timeout', 'file_not_found', 'streamlink_error', 'no_url'
     """
     cmd = ["streamlink", f"https://www.tiktok.com/@{user}", quality] + STREAMLINK_ARGS
     try:
-        # debug print της εντολής
         print(f"👉 Running: {' '.join(cmd)} (timeout={TIMEOUT})")
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=TIMEOUT)
         stdout = (result.stdout or "").strip()
         stderr = (result.stderr or "").strip()
         print(f"   returncode={result.returncode}; stdout_len={len(stdout)}; stderr_len={len(stderr)}")
-        if stdout:
-            print(f"   stdout (truncated): {stdout[:500]}")
-        if stderr:
-            print(f"   stderr (truncated): {stderr[:500]}")
-
-        # Αναζήτηση URL σε stdout και stderr
         url = find_url_in_text(stdout) or find_url_in_text(stderr)
-        return url, result.returncode, stdout, stderr
+        reason = None
+        if not url:
+            reason = "no_url"
+        return url, result.returncode, stdout, stderr, reason
     except subprocess.TimeoutExpired:
         print(f"⏱️ Timeout για χρήστη {user} (timeout={TIMEOUT}s)")
-        return None, None, "", "TimeoutExpired"
+        return None, None, "", "TimeoutExpired", "timeout"
     except FileNotFoundError:
         print("❌ Το streamlink δεν βρέθηκε. Βεβαιώσου ότι είναι εγκατεστημένο (pip install streamlink) και στο PATH.")
-        return None, None, "", "FileNotFoundError"
+        return None, None, "", "FileNotFoundError", "file_not_found"
     except Exception as e:
         print(f"⚠️ Σφάλμα κατά την εκτέλεση streamlink για {user}: {e}")
-        return None, None, "", str(e)
+        return None, None, "", str(e), "streamlink_error"
 
 def check_user_live(user):
     # Προσπαθούμε με την επιλεγμένη ποιότητα πρώτα
-    url, rc, out, err = run_streamlink_and_get_url(user, QUALITY)
-    # Αν δεν βρέθηκε URL και η quality δεν είναι "best", δοκιμάζουμε fallback σε best
-    if not url and QUALITY.lower() != "best":
-        print(f"   Δεν βρέθηκε URL με quality='{QUALITY}' για {user}. Δοκιμάζω fallback σε 'best'.")
-        url, rc, out, err = run_streamlink_and_get_url(user, "best")
+    url, rc, out, err, reason = run_streamlink_and_get_url(user, QUALITY)
 
-    if url:
+    # Fallback σε best αν χρειαστεί
+    if reason == "no_url" and QUALITY.lower() != "best":
+        print(f"   Δεν βρέθηκε URL με quality='{QUALITY}' για {user}. Δοκιμάζω fallback σε 'best'.")
+        url, rc, out, err, reason = run_streamlink_and_get_url(user, "best")
+
+    # Αν βρέθηκε url και φαίνεται έγκυρο, γράφουμε στο m3u
+    if url and is_valid_stream_url(url, user):
         status = colored("είναι σε live", "yellow", "on_blue", attrs=["bold"])
-        # Εγγραφή στο m3u με lock για ασφάλεια σε threads
         with write_lock:
             try:
                 with open(OUTPUT_FILE, "a", encoding="utf-8") as m3u_file:
                     m3u_file.write(
                         f"#EXTINF:-1 group-title=\"{GROUP_TITLE}\" tvg-logo=\"{TVG_LOGO}\" "
-                        f"tvg-id=\"{TVG_ID}\" $ExtFilter=\"{EXT_FILTER}\",{user}\n"
+                        f"tvg-id=\"{TVG_ID}\" $ExtFilter=\"{EXT_FILTER}\",{{user}}\n"
                     )
-                    m3u_file.write(f"{url}\n")
+                    m3u_file.write(f"{{url}}\n")
             except Exception as e:
                 return f"Σφάλμα εγγραφής για {user}: {e}"
         return f"Έλεγχος χρήστη: {user} - {status} -> {url}"
-    else:
-        # Προσθέτουμε πιο λεπτομερές μήνυμα αν υπάρχει stderr ή returncode
-        if err:
-            return f"Έλεγχος χρήστη: {user} - δεν είναι σε live ή σφάλμα: {err[:300]}"
-        return f"Έλεγχος χρήστη: {user} - δεν είναι σε live"
+
+    # Αλλιώς δεν γράφουμε στο m3u — δημιουργούμε λεπτομερές log για το γιατί παραλήφθηκε
+    # reason μπορεί να είναι: timeout, file_not_found, streamlink_error, no_url, invalid_url
+    if url and not is_valid_stream_url(url, user):
+        reason = "invalid_url"
+
+    # Συνθέτουμε ένα χρήσιμο μήνυμα με αιτία και λίγα debug bits (rc, stderr/stdout truncated)
+    debug_parts = []
+    if rc is not None:
+        debug_parts.append(f"rc={rc}")
+    if err:
+        debug_parts.append(f"stderr={err[:200]}")
+    elif out:
+        debug_parts.append(f"stdout={out[:200]}")
+    debug = "; ".join(debug_parts) if debug_parts else "no debug output"
+
+    return f"Έλεγχος χρήστη: {user} - παραλήφθηκε -> reason={reason}; {debug}"
 
 # -------- Main flow --------
 def main():
@@ -167,9 +187,9 @@ def main():
             tqdm(
                 executor.map(check_user_live, users),
                 total=len(users),
-                desc="Έλεγχος χρηστών του tiktok",
+                desc="Έλεγχος χ��ηστών του tiktok",
                 ncols=120,
-                bar_format='{l_bar}{bar}| {n_fmt}/{total_fmt} {postfix}'
+                bar_format='{l_bar}{bar}| {n_fmt}/{total_fmt} {postfix}"
             )
         )
         for result in results:
