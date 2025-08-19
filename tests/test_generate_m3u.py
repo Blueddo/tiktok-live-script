@@ -1,6 +1,7 @@
 import os
 import tempfile
 import subprocess
+import importlib
 from unittest import mock, TestCase
 
 # Assumes generate_m3u.py is in repo root and exposes check_user_live, run_streamlink_and_get_url
