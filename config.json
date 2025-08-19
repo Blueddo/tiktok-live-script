@@ -1,9 +1,9 @@
 {
   "quality": "worst",
-  "timeout": 10,
-  "max_workers": 5,
+  "timeout": 50,
+  "max_workers": 10,
   "output_file": "tiktok_live.m3u",
-  "users_file": "tests/users_test.txt",
+  "users_file": "userstiktok.txt",
   "group_title": "TikTok Live",
   "tvg_logo": "https://www.tiktok.com/favicon.ico",
   "tvg_id": "simpleTVFakeEpgId",
