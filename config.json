@@ -1,5 +1,5 @@
 {
-  "quality": "best",
+  "quality": "worst",
   "timeout": 50,
   "max_workers": 10,
   "output_file": "tiktok_live.m3u",
