@@ -7,9 +7,9 @@ name: Δημιουργία M3U και προσθήκη σε δημόσιο απ�
 #     * tests     -> τρέχει τα tests από τον φάκελο tests
 on:
   schedule:
-    - cron: "0 * * * *"  # Εκτέλεση κάθε ώρα στις :00
+    - cron: "0 * * * *"   # Εκτέλεση κάθε ώρα στις :00
     - cron: "30 * * * *"  # Εκτέλεση κάθε μισή ώρα στις :30
-  workflow_dispatch: # Επιτρέπει την εκτέλεση του workflow χειροκίνητα από το GitHub UI
+  workflow_dispatch:
     inputs:
       mode:
         description: 'Επίλεξε: workflow (dispatch generate_m3u.yml) | script (τρέξε το generate_m3u.py) | tests (τρέξε pytest)'
@@ -37,7 +37,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          # Το hashFiles περιλαμβάνει το root requirements.txt και το tests/requirements.txt
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt','tests/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
 
@@ -87,18 +88,20 @@ jobs:
           DISPATCH_PAT: ${{ secrets.DISPATCH_PAT }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TARGET_WORKFLOW: "generate_m3u.yml"
-          TARGET_REF: ${{ github.event.inputs.ref || 'main' }}
+          TARGET_REF: ${{ github.event.inputs.ref }}
         run: |
           TOKEN="${DISPATCH_PAT:-$GITHUB_TOKEN}"
           if [ -z "$TOKEN" ]; then
             echo "No token available for dispatch. Add a secret named DISPATCH_PAT or ensure GITHUB_TOKEN is present."
             exit 1
           fi
+          # Χρησιμοποιούμε default 'main' αν δεν δοθεί ref
+          REF="${TARGET_REF:-main}"
           curl -sS -X POST \
             -H "Authorization: token $TOKEN" \
             -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/${{ github.repository }}/actions/workflows/${TARGET_WORKFLOW}/dispatches" \
-            -d "{\"ref\":\"${TARGET_REF}\"}" \
+            -d "{\"ref\":\"${REF}\"}" \
             || (echo "dispatch request failed" && exit 1)
           echo "Dispatch request sent."
 
@@ -114,18 +117,24 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Πακέτα μνήμης cache pip (tests)
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt','tests/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
       - name: Εγκατάσταση system packages (streamlink)
         run: |
           sudo apt-get update
-          # streamlink είναι απαραίτητο για τα real integration tests
+          # streamlink απαιτείται για τα πραγματικά integration tests
           sudo apt-get install -y streamlink
 
       - name: Εγκατάσταση εξαρτήσεων (root + tests)
         run: |
           python -m pip install --upgrade pip
-          # Εγκατάσταση global requirements αν υπάρχει στο root
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          # Εγκατάσταση επιπλέον requirements ειδικά για tests
           if [ -f tests/requirements.txt ]; then pip install -r tests/requirements.txt; fi
 
       - name: Εκτέλεση δοκιμών
