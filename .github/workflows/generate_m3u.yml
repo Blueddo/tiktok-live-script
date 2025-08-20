@@ -23,7 +23,7 @@ on:
 jobs:
   generate_m3u:
     if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.mode == 'script')
-    runs-on: ubuntu-latest # Χρήση μεγαλύτερου runner για βελτιωμένη απόδοση
+    runs-on: ubuntu-latest
     steps:
       - name: Εγκαταστήστε GH και JQ (που χρησιμοποιείται από το σενάριο για ελέγχους ρυθμού)
         run: |
@@ -44,9 +44,9 @@ jobs:
       - name: Ρύθμιση Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12' # Χρησιμοποίησε την έκδοση Python που χρειάζεται το σκριπτ σου
+          python-version: '3.12'
 
-      - name: Εγκατάσταση εξαρτήσεων
+      - name: Εγκατάσταση εξαρτήσεων (root requirements.txt αν υπάρχει)
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
@@ -80,7 +80,7 @@ jobs:
 
   dispatch_workflow:
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.mode == 'workflow'
-    runs-on: ubuntu-latest # Χρήση μεγαλύτερου runner για βελτιωμένη απόδοση
+    runs-on: ubuntu-latest
     steps:
       - name: Εκκίνηση ροής εργασίας generate_m3u.yml μέσω API
         env:
@@ -104,7 +104,7 @@ jobs:
 
   run_tests:
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.mode == 'tests'
-    runs-on: ubuntu-latest # Χρήση μεγαλύτερου runner για βελτιωμένη απόδοση
+    runs-on: ubuntu-latest
     steps:
       - name: Έλεγχος αποθετηρίου
         uses: actions/checkout@v4
@@ -112,12 +112,21 @@ jobs:
       - name: Ρύθμιση Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12' # Χρησιμοποίησε την έκδοση Python που χρειάζεται το σκριπτ σου
+          python-version: '3.12'
 
-      - name: Εγκατάσταση δοκιμής Depp
+      - name: Εγκατάσταση system packages (streamlink)
+        run: |
+          sudo apt-get update
+          # streamlink είναι απαραίτητο για τα real integration tests
+          sudo apt-get install -y streamlink
+
+      - name: Εγκατάσταση εξαρτήσεων (root + tests)
         run: |
           python -m pip install --upgrade pip
-          pip install --no-cache-dir pytest
+          # Εγκατάσταση global requirements αν υπάρχει στο root
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          # Εγκατάσταση επιπλέον requirements ειδικά για tests
+          if [ -f tests/requirements.txt ]; then pip install -r tests/requirements.txt; fi
 
       - name: Εκτέλεση δοκιμών
         run: |
