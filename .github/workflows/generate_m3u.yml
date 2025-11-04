@@ -74,7 +74,7 @@ jobs:
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           cp ../tiktok_live.m3u tiktok_live.m3u || true
           git add tiktok_live.m3u
-          git commit -m 'Update M3U playlist' || echo "No changes to commit"
+          git commit -m "Update M3U playlist [${{ github.event.inputs.trigger || 'manual' }}]" || echo "No changes to commit"
           if [ "${{ env.switch_profile }}" = "true" ]; then
             git push https://Blueddo:${PUBLIC_REPO_PAT_ALT}@github.com/Blueddo/Bluelist.git || echo "Push failed"
           else
