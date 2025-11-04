@@ -1,14 +1,9 @@
 name: Δημιουργία M3U και προσθήκη σε δημόσιο αποθετήριο
-# Αυτό το workflow υποστηρίζει:
-# - προγραμματισμένες εκτελέσεις (cron κάθε :00 και :30) που πάντα τρέχουν το generate (τοπικό generate_m3u.py)
-# - χειροκίνητο run (Actions → Run workflow) με επιλογή mode:
-#     * workflow  -> κάνει dispatch το workflow generate_m3u.yml (API)
-#     * script    -> τρέχει το generate_m3u.py που υπάρχει στο repo (προεπιλογή)
-#     * tests     -> τρέχει τα tests από τον φάκελο tests
+
 on:
-  #schedule:
-  #  - cron: "05 * * * *"  # Εκτέλεση κάθε στις :05
-  #  - cron: "33 * * * *"  # Εκτέλεση κάθε στις :33
+  # schedule:
+  #   - cron: "05 * * * *"  # Εκτέλεση κάθε στις :05
+  #   - cron: "33 * * * *"  # Εκτέλεση κάθε στις :33
   workflow_dispatch:
     inputs:
       mode:
@@ -30,6 +25,9 @@ jobs:
     if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.mode == 'script')
     runs-on: ubuntu-latest
     steps:
+      - name: Εμφάνιση trigger πηγής
+        run: echo "::notice title=Trigger Source::${{ github.event.inputs.trigger || 'manual' }}"
+
       - name: Εγκαταστήστε GH και JQ (που χρησιμοποιείται από το σενάριο για ελέγχους ρυθμού)
         run: |
           sudo apt-get update
@@ -42,7 +40,6 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
-          # Το hashFiles περιλαμβάνει το root requirements.txt και το tests/requirements.txt
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt','tests/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
@@ -100,7 +97,6 @@ jobs:
             echo "No token available for dispatch. Add a secret named DISPATCH_PAT or ensure GITHUB_TOKEN is present."
             exit 1
           fi
-          # Χρησιμοποιούμε default 'main' αν δεν δοθεί ref
           REF="${TARGET_REF:-main}"
           curl -sS -X POST \
             -H "Authorization: token $TOKEN" \
@@ -133,7 +129,6 @@ jobs:
       - name: Εγκατάσταση system packages (streamlink)
         run: |
           sudo apt-get update
-          # streamlink απαιτείται για τα πραγματικά integration tests
           sudo apt-get install -y streamlink
 
       - name: Εγκατάσταση εξαρτήσεων (root + tests)
