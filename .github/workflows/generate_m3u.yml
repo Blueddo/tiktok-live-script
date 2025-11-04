@@ -1,4 +1,4 @@
-name: Δημιουργία M3U και προσθήκη σε δημόσιο αποθετήριο
+name: Δημιουργία M3U και προσθήκη σε δημόσιο αποθετήριο (${{ github.event.inputs.trigger || 'manual' }})
 # Αυτό το workflow υποστηρίζει:
 # - προγραμματισμένες εκτελέσεις (cron κάθε :00 και :30) που πάντα τρέχουν το generate (τοπικό generate_m3u.py)
 # - χειροκίνητο run (Actions → Run workflow) με επιλογή mode:
@@ -19,6 +19,10 @@ on:
         description: 'Το git ref (branch/tag) για dispatch όταν mode=workflow'
         required: false
         default: 'main'
+      trigger:
+        description: 'Πηγή εκτέλεσης (manual/cronjob)'
+        required: false
+        default: 'manual'
 
 jobs:
   generate_m3u:
