@@ -171,8 +171,8 @@ haroula_taotao
 karydaki_land
 akadimia_ygeias
 mari_sweet_and_cake
-irinious1
-eirini_psychologi
+irenear1
+eirini_education
 evasshelterkastoria
 xristos.nazloglou
 petrostsernios
@@ -201,7 +201,8 @@ national_star_antreoulis
 billiardgr
 ithunder.gr
 fishing_gives_life 
-six_senses_candles2
+six_senses_candles
+sk_ioannina
 kalliopifen1
 pimenidisfillipos
 potsepistasos
