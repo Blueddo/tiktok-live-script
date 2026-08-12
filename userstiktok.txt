@@ -9,7 +9,6 @@ zumairoula
 despoiniopouliopouloy.1
 glykia_texni
 theano.karipi
-leuteris.goude
 greciantaste
 sunset_foteini
 paschalinamis
@@ -154,6 +153,7 @@ evangeloskarevlidis
 eddies.bakery5
 thomastsirogiannis2025
 thomastsirogiannis1986
+argurwaleksoglou
 gianniszizzis
 alyskeiaroubini
 alyskeia
@@ -231,7 +231,8 @@ zaxaroplastisa
 greekkitchenbychristina
 evgenis_smusenok
 jennakivl
-kostaspal.82
+kostaspal82
+germanos_sokratis
 glorioustheoc
 magic_vesto
 ontotita4
